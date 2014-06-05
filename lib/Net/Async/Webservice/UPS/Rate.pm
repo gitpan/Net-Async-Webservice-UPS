@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Rate;
-$Net::Async::Webservice::UPS::Rate::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Rate::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -81,7 +81,7 @@ Net::Async::Webservice::UPS::Rate - shipment rate from UPS
 
 =head1 VERSION
 
-version 0.09_1
+version 0.09_2
 
 =head1 DESCRIPTION
 
@@ -132,11 +132,11 @@ Recipient address for this shipment.
 
 =item *
 
-Sherzod B. Ruzmetov <sherzodr@cpan.org>
+Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
 
 =item *
 
-Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
+Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =back
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::SyncAgentWrapper;
-$Net::Async::Webservice::UPS::SyncAgentWrapper::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::SyncAgentWrapper::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::SyncAgentWrapper::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -25,7 +25,7 @@ sub do_request {
 
     my $response = $self->ua->request($request);
     if ($fail && ! $response->is_success) {
-        return Future->new->fail($response);
+        return Future->new->fail($response->status_line,'http',$response,$request);
     }
     return Future->wrap($response);
 }
@@ -47,7 +47,7 @@ Net::Async::Webservice::UPS::SyncAgentWrapper - minimal wrapper to adapt a sync 
 
 =head1 VERSION
 
-version 0.09_1
+version 0.09_2
 
 =head1 DESCRIPTION
 
@@ -79,11 +79,11 @@ Empty method, here just to help with duck-type detection.
 
 =item *
 
-Sherzod B. Ruzmetov <sherzodr@cpan.org>
+Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
 
 =item *
 
-Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
+Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =back
 

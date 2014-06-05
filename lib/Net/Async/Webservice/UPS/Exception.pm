@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -8,8 +8,6 @@ with 'Throwable','StackTrace::Auto';
 use overload
   q{""}    => 'as_string',
   fallback => 1;
-
-# ABSTRACT: base exception class for UPS
 
 
 around _build_stack_trace_args => sub {
@@ -30,14 +28,12 @@ around _build_stack_trace_args => sub {
 sub as_string { "something bad happened at ". $_[0]->stack_trace->as_string }
 
 {package Net::Async::Webservice::UPS::Exception::ConfigError;
-$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Exception::ConfigError::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::UPS::Exception';
-
- # ABSTRACT: exception thrown when the configuration file can't be parsed
 
 
  has file => ( is => 'ro', required => 1 );
@@ -53,14 +49,12 @@ $Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_1';
 }
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::UPS::Exception';
-
- # ABSTRACT: exception thrown when a package is too big for UPS to carry
 
 
  has package => ( is => 'ro', required => 1 );
@@ -81,14 +75,13 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_1';
 }
 
 {package Net::Async::Webservice::UPS::Exception::HTTPError;
-$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Exception::HTTPError::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::UPS::Exception';
-
- # ABSTRACT: exception thrown when the HTTP request fails
+ use Try::Tiny;
 
 
  has request => ( is => 'ro', required => 1 );
@@ -100,20 +93,18 @@ $Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_1';
 
      return sprintf 'Error %sing %s: %s, at %s',
          $self->request->method,$self->request->uri,
-         $self->response->status_line,
+         (try {$self->response->status_line} catch {'no response'}),
          $self->stack_trace->as_string;
  }
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::UPS::Exception';
-
- # ABSTRACT: exception thrown when UPS signals an error
 
 
  has error => ( is => 'ro', required => 1 );
@@ -140,59 +131,99 @@ __END__
 
 =head1 NAME
 
-Net::Async::Webservice::UPS::Exception - base exception class for UPS
+Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 0.09_1
+version 0.09_2
 
 =head1 DESCRIPTION
 
-This class is based on L<Throwable> and L<StackTrace::Auto>. The
+These classes are based on L<Throwable> and L<StackTrace::Auto>. The
 L</as_string> method should return something readable, with a full
 stack trace.
 
-=head1 ATTRIBUTES
+=head1 NAME
 
-=head2 C<file>
+Net::Async::Webservice::UPS::Exception - exception classes for UPS
 
-The name of the configuration file.
+=head1 Classes
 
-=head2 C<package>
+=head2 C<Net::Async::Webservice::UPS::Exception>
 
-The package object that's too big.
+Base class.
 
-=head2 C<request>
+=head3 Methods
 
-The request that failed.
-
-=head2 C<response>
-
-The failure response returned by the user agent
-
-=head2 C<error>
-
-The error data structure extracted from the UPS response.
-
-=head1 METHODS
-
-=head2 C<as_string>
+=head4 C<as_string>
 
 Generic "something bad happened", with stack trace.
 
-=head2 C<as_string>
+=head2 C<Net::Async::Webservice::UPS::Exception::ConfigError>
+
+exception thrown when the configuration file can't be parsed
+
+=head3 Attributes
+
+=head4 C<file>
+
+The name of the configuration file.
+
+=head3 Methods
+
+=head4 C<as_string>
 
 Mentions the file name, and gives the stack trace.
 
-=head2 C<as_string>
+=head2 C<Net::Async::Webservice::UPS::Exception::BadPackage>
+
+exception thrown when a package is too big for UPS to carry
+
+=head3 Attributes
+
+=head4 C<package>
+
+The package object that's too big.
+
+=head3 Methods
+
+=head4 C<as_string>
 
 Shows the size of the package, and the stack trace.
 
-=head2 C<as_string>
+=head2 C<Net::Async::Webservice::UPS::Exception::HTTPError>
+
+exception thrown when the HTTP request fails
+
+=head3 Attributes
+
+=head4 C<request>
+
+The request that failed.
+
+=head4 C<response>
+
+The failure response returned by the user agent
+
+=head3 Methods
+
+=head4 C<as_string>
 
 Mentions the HTTP method, URL, response status line, and stack trace.
 
-=head2 C<as_string>
+=head2 C<Net::Async::Webservice::UPS::Exception::UPSError>
+
+exception thrown when UPS signals an error
+
+=head3 Attributes
+
+=head4 C<error>
+
+The error data structure extracted from the UPS response.
+
+=head3 Methods
+
+=head4 C<as_string>
 
 Mentions the description, severity, and code of the error, plus the
 stack trace.
@@ -203,11 +234,11 @@ stack trace.
 
 =item *
 
-Sherzod B. Ruzmetov <sherzodr@cpan.org>
+Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
 
 =item *
 
-Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
+Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =back
 

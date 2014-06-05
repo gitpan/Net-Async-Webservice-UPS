@@ -1,8 +1,8 @@
 {
    "abstract" : "Implementation of UPS Online Tools API in Perl",
    "author" : [
-      "Sherzod B. Ruzmetov <sherzodr@cpan.org>",
-      "Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>"
+      "Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>",
+      "Sherzod B. Ruzmetov <sherzodr@cpan.org>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640",
@@ -59,6 +59,7 @@
             "Type::Params" : "0",
             "Type::Utils" : "0",
             "Types::Standard" : "0",
+            "Types::URI" : "0",
             "XML::Simple" : "0",
             "namespace::autoclean" : "0",
             "overload" : "0",
@@ -96,6 +97,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS.git"
       }
    },
-   "version" : "0.09_1"
+   "version" : "0.09_2"
 }
 

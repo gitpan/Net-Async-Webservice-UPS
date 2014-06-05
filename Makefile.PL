@@ -11,7 +11,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Implementation of UPS Online Tools API in Perl",
-  "AUTHOR" => "Sherzod B. Ruzmetov <sherzodr\@cpan.org>, Gianni Ceccarelli <gianni.ceccarelli\@net-a-porter.com>",
+  "AUTHOR" => "Gianni Ceccarelli <gianni.ceccarelli\@net-a-porter.com>, Sherzod B. Ruzmetov <sherzodr\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
@@ -37,6 +37,7 @@ my %WriteMakefileArgs = (
     "Type::Params" => 0,
     "Type::Utils" => 0,
     "Types::Standard" => 0,
+    "Types::URI" => 0,
     "XML::Simple" => 0,
     "namespace::autoclean" => 0,
     "overload" => 0,
@@ -55,7 +56,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.09_1",
+  "VERSION" => "0.09_2",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -89,6 +90,7 @@ my %FallbackPrereqs = (
   "Type::Params" => 0,
   "Type::Utils" => 0,
   "Types::Standard" => 0,
+  "Types::URI" => 0,
   "XML::Simple" => 0,
   "lib" => 0,
   "namespace::autoclean" => 0,

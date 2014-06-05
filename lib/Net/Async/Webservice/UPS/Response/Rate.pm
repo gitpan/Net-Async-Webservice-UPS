@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Rate;
-$Net::Async::Webservice::UPS::Response::Rate::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::Response::Rate::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::Response::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -38,7 +38,7 @@ Net::Async::Webservice::UPS::Response::Rate - response for request_rate
 
 =head1 VERSION
 
-version 0.09_1
+version 0.09_2
 
 =head1 DESCRIPTION
 
@@ -63,11 +63,11 @@ Hashref of warnings extracted from the UPS response.
 
 =item *
 
-Sherzod B. Ruzmetov <sherzodr@cpan.org>
+Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
 
 =item *
 
-Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
+Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =back
 

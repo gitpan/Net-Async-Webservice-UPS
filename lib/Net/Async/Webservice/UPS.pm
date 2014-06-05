@@ -1,11 +1,12 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '0.09_1';
+$Net::Async::Webservice::UPS::VERSION = '0.09_2';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
 use XML::Simple;
 use Types::Standard qw(Str Bool Object Dict Optional ArrayRef HashRef Undef);
+use Types::URI qw(Uri);
 use Type::Params qw(compile);
 use Error::TypeTiny;
 use Net::Async::Webservice::UPS::Types qw(:types to_Service);
@@ -61,8 +62,9 @@ has live_mode => (
 
 has base_url => (
     is => 'lazy',
-    isa => Str,
+    isa => Uri,
     clearer => '_clear_base_url',
+    coerce => Uri->coercion,
 );
 
 sub _trigger_live_mode {
@@ -576,7 +578,7 @@ sub post {
             )
         },
         fail => sub {
-            my ($exception,undef,$response,$request) = @_;
+            my ($exception,undef,$response) = @_;
             return Net::Async::Webservice::UPS::Exception::HTTPError->new({
                 request=>$request,
                 response=>$response,
@@ -615,7 +617,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 0.09_1
+version 0.09_2
 
 =head1 SYNOPSIS
 
@@ -673,9 +675,10 @@ you're using some custom API endpoint.
 
 =head2 C<base_url>
 
-A string. The base URL to use to send API requests to (actual requests
-will be C<POST>ed to an actual URL built from this by appending the
-appropriate service path). Defaults to the standard UPS endpoints:
+A L<URI> object, coercible from a string. The base URL to use to send
+API requests to (actual requests will be C<POST>ed to an actual URL
+built from this by appending the appropriate service path). Defaults
+to the standard UPS endpoints:
 
 =over 4
 
@@ -915,7 +918,7 @@ C<data> and C<XMLout> options.
 
 It then posts (possibly asynchronously) this to the URL obtained
 concatenating L</base_url> with C<url_suffix> (see the L</post>
-method). If the request is successful, it parser the body (with
+method). If the request is successful, it parses the body (with
 L<XML::Simple> using the C<XMLin> options) and completes the returned
 future with the result.
 
@@ -946,11 +949,11 @@ with the same cache key should return the same response.
 
 =item *
 
-Sherzod B. Ruzmetov <sherzodr@cpan.org>
+Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
 
 =item *
 
-Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>
+Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =back
 
