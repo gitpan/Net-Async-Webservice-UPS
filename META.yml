@@ -53,9 +53,9 @@ requires:
   XML::Simple: '0'
   namespace::autoclean: '0'
   overload: '0'
-  perl: v5.10.0
+  perl: '5.010'
   strict: '0'
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 0.09_2
+version: 0.09_3

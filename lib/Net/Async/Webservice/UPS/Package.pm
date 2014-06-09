@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Package;
-$Net::Async::Webservice::UPS::Package::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Package::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Package::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -9,7 +9,7 @@ use Types::Standard qw(Int Object);
 use Net::Async::Webservice::UPS::Types ':types';
 use Net::Async::Webservice::UPS::Exception;
 use namespace::autoclean;
-use 5.10.0;
+use 5.010;
 
 # ABSTRACT: a package for UPS
 
@@ -200,7 +200,7 @@ Net::Async::Webservice::UPS::Package - a package for UPS
 
 =head1 VERSION
 
-version 0.09_2
+version 0.09_3
 
 =head1 ATTRIBUTES
 

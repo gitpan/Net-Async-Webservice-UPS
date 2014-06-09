@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::SyncAgentWrapper;
-$Net::Async::Webservice::UPS::SyncAgentWrapper::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::SyncAgentWrapper::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::SyncAgentWrapper::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -47,7 +47,7 @@ Net::Async::Webservice::UPS::SyncAgentWrapper - minimal wrapper to adapt a sync 
 
 =head1 VERSION
 
-version 0.09_2
+version 0.09_3
 
 =head1 DESCRIPTION
 

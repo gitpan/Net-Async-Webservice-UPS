@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -22,7 +22,7 @@ use Net::Async::Webservice::UPS::Service;
 use Net::Async::Webservice::UPS::Response::Rate;
 use Net::Async::Webservice::UPS::Response::Address;
 use Future;
-use 5.10.0;
+use 5.010;
 
 # ABSTRACT: UPS API client, non-blocking
 
@@ -462,6 +462,7 @@ sub validate_street_address {
                     error => {
                         ErrorDescription => 'The Address Matching System is not able to match an address from any other one in the database',
                     },
+                    'ups',
                 }));
             }
             if ($response->{AmbiguousAddressIndicator}) {
@@ -469,7 +470,7 @@ sub validate_street_address {
                     error => {
                         ErrorDescription => 'The Address Matching System is not able to explicitly differentiate an address from any other one in the database',
                     },
-                }));
+                }),'ups');
             }
 
             my $quality = 0;
@@ -548,7 +549,8 @@ sub xml_request {
                 return Future->new->fail(
                     Net::Async::Webservice::UPS::Exception::UPSError->new({
                         error => $response->{Response}{Error}
-                    })
+                    }),
+                    'ups',
                   );
             }
             return Future->wrap($response);
@@ -579,10 +581,10 @@ sub post {
         },
         fail => sub {
             my ($exception,undef,$response) = @_;
-            return Net::Async::Webservice::UPS::Exception::HTTPError->new({
+            return (Net::Async::Webservice::UPS::Exception::HTTPError->new({
                 request=>$request,
                 response=>$response,
-            })
+            }),'ups')
         },
     );
 }
@@ -617,7 +619,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 0.09_2
+version 0.09_3
 
 =head1 SYNOPSIS
 

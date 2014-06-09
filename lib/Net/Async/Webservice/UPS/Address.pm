@@ -1,10 +1,10 @@
 package Net::Async::Webservice::UPS::Address;
-$Net::Async::Webservice::UPS::Address::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Address::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Address::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
-use 5.10.0;
+use 5.010;
 use Types::Standard qw(Str Int Bool StrictNum);
 use Net::Async::Webservice::UPS::Types ':types';
 
@@ -213,7 +213,7 @@ Net::Async::Webservice::UPS::Address - an address for UPS
 
 =head1 VERSION
 
-version 0.09_2
+version 0.09_3
 
 =head1 ATTRIBUTES
 

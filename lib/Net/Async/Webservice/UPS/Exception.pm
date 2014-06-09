@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -28,7 +28,7 @@ around _build_stack_trace_args => sub {
 sub as_string { "something bad happened at ". $_[0]->stack_trace->as_string }
 
 {package Net::Async::Webservice::UPS::Exception::ConfigError;
-$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Exception::ConfigError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -49,7 +49,7 @@ $Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_2';
 }
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -75,7 +75,7 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_2';
 }
 
 {package Net::Async::Webservice::UPS::Exception::HTTPError;
-$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Exception::HTTPError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -99,7 +99,7 @@ $Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_2';
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_2';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_3';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -135,7 +135,7 @@ Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 0.09_2
+version 0.09_3
 
 =head1 DESCRIPTION
 

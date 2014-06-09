@@ -39,6 +39,7 @@ subtest 'HTTP failure' => sub {
                     response => methods(code=>500),
                 ),
             ),
+            'ups',
         ],
     );
 };
@@ -69,6 +70,7 @@ subtest 'UPS failure' => sub {
                     },
                 ),
             ),
+            'ups',
         ],
     );
 };
