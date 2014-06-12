@@ -1,3 +1,9 @@
+0.09_5 2014-06-10
+ - exception class UPSError now has methods to look inside the error data
+
+0.09_4 2014-06-10
+ - do not swallow non-HTTP exceptions
+
 0.09_3 2014-06-09
  - failed Futures now have a 'ups' string as second element, as
    recommended by PEVANS

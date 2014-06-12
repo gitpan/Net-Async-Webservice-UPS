@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Types::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -207,7 +207,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 0.09_3
+version 0.09_5
 
 =head1 DESCRIPTION
 

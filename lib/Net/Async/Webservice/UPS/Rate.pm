@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Rate;
-$Net::Async::Webservice::UPS::Rate::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Rate::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -81,7 +81,7 @@ Net::Async::Webservice::UPS::Rate - shipment rate from UPS
 
 =head1 VERSION
 
-version 0.09_3
+version 0.09_5
 
 =head1 DESCRIPTION
 

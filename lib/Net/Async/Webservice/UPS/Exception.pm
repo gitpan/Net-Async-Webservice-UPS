@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Exception::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -28,7 +28,7 @@ around _build_stack_trace_args => sub {
 sub as_string { "something bad happened at ". $_[0]->stack_trace->as_string }
 
 {package Net::Async::Webservice::UPS::Exception::ConfigError;
-$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Exception::ConfigError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -49,7 +49,7 @@ $Net::Async::Webservice::UPS::Exception::ConfigError::VERSION = '0.09_3';
 }
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -75,7 +75,7 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '0.09_3';
 }
 
 {package Net::Async::Webservice::UPS::Exception::HTTPError;
-$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Exception::HTTPError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -86,20 +86,22 @@ $Net::Async::Webservice::UPS::Exception::HTTPError::VERSION = '0.09_3';
 
  has request => ( is => 'ro', required => 1 );
  has response => ( is => 'ro', required => 1 );
+ has more_info => ( is => 'ro', default => '' );
 
 
  sub as_string {
      my ($self) = @_;
 
-     return sprintf 'Error %sing %s: %s, at %s',
+     return sprintf 'Error %sing %s: %s %s, at %s',
          $self->request->method,$self->request->uri,
          (try {$self->response->status_line} catch {'no response'}),
+         $self->more_info,
          $self->stack_trace->as_string;
  }
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -110,13 +112,18 @@ $Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '0.09_3';
  has error => ( is => 'ro', required => 1 );
 
 
+ sub error_description { $_[0]->error->{ErrorDescription} }
+ sub error_severity { $_[0]->error->{ErrorSeverity} }
+ sub error_code { $_[0]->error->{ErrorCode} }
+
+
  sub as_string {
      my ($self) = @_;
 
      return sprintf 'UPS returned an error: %s, severity %s, code %d, at %s',
-         $self->error->{ErrorDescription}//'<undef>',
-         $self->error->{ErrorSeverity}//'<undef>',
-         $self->error->{ErrorCode}//'<undef>',
+         $self->error_description//'<undef>',
+         $self->error_severity//'<undef>',
+         $self->error_code//'<undef>',
          $self->stack_trace->as_string;
  }
 }
@@ -135,7 +142,7 @@ Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 0.09_3
+version 0.09_5
 
 =head1 DESCRIPTION
 
@@ -222,6 +229,15 @@ exception thrown when UPS signals an error
 The error data structure extracted from the UPS response.
 
 =head3 Methods
+
+=head4 C<error_description>
+
+=head4 C<error_severity>
+
+=head4 C<error_code>
+
+These just return the similarly-named fields from inside L</error>:
+C<ErrorDescription>, C<ErrorSeverity> and C<ErrorCode>.
 
 =head4 C<as_string>
 

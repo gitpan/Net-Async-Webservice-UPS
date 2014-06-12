@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '0.09_3';
+$Net::Async::Webservice::UPS::VERSION = '0.09_5';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -580,11 +580,12 @@ sub post {
             )
         },
         fail => sub {
-            my ($exception,undef,$response) = @_;
+            my ($exception,$kind,$response) = @_;
             return (Net::Async::Webservice::UPS::Exception::HTTPError->new({
                 request=>$request,
                 response=>$response,
-            }),'ups')
+                (($kind//'') ne 'http' ? ( more_info => "@_" ) : ()),
+            }),'ups');
         },
     );
 }
@@ -619,7 +620,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 0.09_3
+version 0.09_5
 
 =head1 SYNOPSIS
 
