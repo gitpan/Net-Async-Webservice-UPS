@@ -15,7 +15,6 @@ lib/Net/Async/Webservice/UPS/Rate.pm
 lib/Net/Async/Webservice/UPS/Response/Address.pm
 lib/Net/Async/Webservice/UPS/Response/Rate.pm
 lib/Net/Async/Webservice/UPS/Service.pm
-lib/Net/Async/Webservice/UPS/SyncAgentWrapper.pm
 lib/Net/Async/Webservice/UPS/Types.pm
 t/Package.t
 t/address.t
@@ -26,6 +25,13 @@ t/data/rate-1-package
 t/data/rate-2-packages
 t/data/shop-1-package
 t/data/shop-2-packages
+t/lib/Net/Async/Webservice/Common.pm
+t/lib/Net/Async/Webservice/Common/Exception.pm
+t/lib/Net/Async/Webservice/Common/SyncAgentWrapper.pm
+t/lib/Net/Async/Webservice/Common/Types.pm
+t/lib/Net/Async/Webservice/Common/WithConfigFile.pm
+t/lib/Net/Async/Webservice/Common/WithRequestWrapper.pm
+t/lib/Net/Async/Webservice/Common/WithUserAgent.pm
 t/lib/Test/Net/Async/Webservice/UPS.pm
 t/lib/Test/Net/Async/Webservice/UPS/Factory.pm
 t/lib/Test/Net/Async/Webservice/UPS/NoNetwork.pm
@@ -36,6 +42,5 @@ t/net-async-webservice-ups-live.t
 t/net-async-webservice-ups-offline.t
 t/rate.t
 t/release-no-tabs.t
-t/release-pod-coverage.t
 t/release-pod-syntax.t
 weaver.ini

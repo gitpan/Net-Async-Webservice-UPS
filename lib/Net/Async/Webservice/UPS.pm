@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '0.09_5';
+$Net::Async::Webservice::UPS::VERSION = '0.09_6';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -127,31 +127,13 @@ sub does_caching {
 }
 
 
-has user_agent => (
-    is => 'ro',
-    isa => AsyncUserAgent,
-    required => 1,
-    coerce => AsyncUserAgent->coercion,
-);
-
+with 'Net::Async::Webservice::Common::WithUserAgent';
+with 'Net::Async::Webservice::Common::WithConfigFile';
 
 around BUILDARGS => sub {
     my ($orig,$class,@args) = @_;
 
     my $ret = $class->$orig(@args);
-
-    if (my $config_file = delete $ret->{config_file}) {
-        $ret = {
-            %{_load_config_file($config_file)},
-            %$ret,
-        };
-    }
-
-    if (ref $ret->{loop} && !$ret->{user_agent}) {
-        require Net::Async::HTTP;
-        $ret->{user_agent} = Net::Async::HTTP->new();
-        $ret->{loop}->add($ret->{user_agent});
-    }
 
     if ($ret->{cache_life}) {
         require CHI;
@@ -170,21 +152,6 @@ around BUILDARGS => sub {
 
     return $ret;
 };
-
-sub _load_config_file {
-    my ($file) = @_;
-    require Config::Any;
-    my $loaded = Config::Any->load_files({
-        files => [$file],
-        use_ext => 1,
-        flatten_to_hash => 1,
-    });
-    my $config = $loaded->{$file};
-    Net::Async::Webservice::UPS::Exception::ConfigError->throw({
-        file => $file,
-    }) unless $config;
-    return $config;
-}
 
 
 sub transaction_reference {
@@ -535,7 +502,7 @@ sub xml_request {
                 %{ $args->{XMLout}||{} },
             );
 
-    return $self->post( $args->{url_suffix}, $request )->then(
+    return $self->post( $self->base_url . $args->{url_suffix}, $request )->then(
         sub {
             my ($response_string) = @_;
 
@@ -559,36 +526,7 @@ sub xml_request {
 }
 
 
-sub post {
-    state $argcheck = compile( Object, Str, Str );
-    my ($self, $url_suffix, $body) = $argcheck->(@_);
-
-    my $url = $self->base_url . $url_suffix;
-    my $request = HTTP::Request->new(
-        POST => $url,
-        [], encode('utf-8',$body),
-    );
-    my $response_future = $self->user_agent->do_request(
-        request => $request,
-        fail_on_error => 1,
-    )->transform(
-        done => sub {
-            my ($response) = @_;
-            return $response->decoded_content(
-                default_charset => 'utf-8',
-                raise_error => 1,
-            )
-        },
-        fail => sub {
-            my ($exception,$kind,$response) = @_;
-            return (Net::Async::Webservice::UPS::Exception::HTTPError->new({
-                request=>$request,
-                response=>$response,
-                (($kind//'') ne 'http' ? ( more_info => "@_" ) : ()),
-            }),'ups');
-        },
-    );
-}
+with 'Net::Async::Webservice::Common::WithRequestWrapper';
 
 
 sub generate_cache_key {
@@ -620,7 +558,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 0.09_5
+version 0.09_6
 
 =head1 SYNOPSIS
 
@@ -937,7 +875,7 @@ Posts the given C<$body> to the URL obtained concatenating
 L</base_url> with C<$url_suffix>. If the request is successful, it
 completes the returned future with the decoded content of the
 response, otherwise it fails the future with a
-L<Net::Async::Webservice::UPS::Exception::HTTPError> instance.
+L<Net::Async::Webservice::Common::Exception::HTTPError> instance.
 
 =head2 C<generate_cache_key>
 

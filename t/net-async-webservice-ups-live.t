@@ -17,16 +17,15 @@ subtest 'connection failures' => sub {
               fail "it connected to a non-existing host?";
               Future->wrap();
           },
-        sub { my ($fail) = @_;
-              cmp_deeply($fail,
-                         all(
-                             isa('Net::Async::Webservice::UPS::Exception::HTTPError'),
+        sub { cmp_deeply(\@_,
+                         [ all(
+                             isa('Net::Async::Webservice::Common::Exception::HTTPError'),
                              methods(
                                  request => isa('HTTP::Request'),
                                  response => undef,
                                  more_info => re(qr{\bname or service not known\b}i),
                              ),
-                         ),
+                         ),'webservice'],
                          'correctly failed to connect',
                      );
               Future->wrap();

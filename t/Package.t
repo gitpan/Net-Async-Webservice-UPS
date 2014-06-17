@@ -1,6 +1,8 @@
 #!perl
 use strict;
 use warnings;
+use 5.010;
+use lib 't/lib';
 use Test::Most;
 use Net::Async::Webservice::UPS::Package;
 

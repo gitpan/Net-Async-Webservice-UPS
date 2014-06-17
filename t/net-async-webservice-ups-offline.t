@@ -34,12 +34,12 @@ subtest 'HTTP failure' => sub {
         [$f->failure],
         [
             all(
-                isa('Net::Async::Webservice::UPS::Exception::HTTPError'),
+                isa('Net::Async::Webservice::Common::Exception::HTTPError'),
                 methods(
                     response => methods(code=>500),
                 ),
             ),
-            'ups',
+            'webservice',
         ],
     );
 };

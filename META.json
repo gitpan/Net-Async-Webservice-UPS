@@ -27,11 +27,9 @@
       },
       "develop" : {
          "requires" : {
-            "Pod::Coverage::TrustPod" : "0",
             "Test::More" : "0",
             "Test::NoTabs" : "0",
-            "Test::Pod" : "1.41",
-            "Test::Pod::Coverage" : "1.08"
+            "Test::Pod" : "1.41"
          }
       },
       "runtime" : {
@@ -42,7 +40,6 @@
             "Net::Async::HTTP" : "0"
          },
          "requires" : {
-            "Config::Any" : "0",
             "Encode" : "0",
             "Error::TypeTiny" : "0",
             "File::Spec" : "0",
@@ -51,9 +48,7 @@
             "List::AllUtils" : "0",
             "Moo" : "0",
             "Scalar::Util" : "0",
-            "StackTrace::Auto" : "0",
             "Task::Weaken" : "0",
-            "Throwable" : "0",
             "Try::Tiny" : "0",
             "Type::Library" : "0",
             "Type::Params" : "0",
@@ -62,7 +57,6 @@
             "Types::URI" : "0",
             "XML::Simple" : "0",
             "namespace::autoclean" : "0",
-            "overload" : "0",
             "perl" : "5.010",
             "strict" : "0",
             "warnings" : "0"
@@ -76,16 +70,23 @@
             "Net::Async::HTTP" : "0"
          },
          "requires" : {
+            "Carp" : "0",
+            "Config::Any" : "0",
             "Data::Printer" : "0",
             "File::Temp" : "0",
+            "HTTP::Request::Common" : "0",
             "HTTP::Response" : "0",
+            "Moo::Role" : "0",
+            "StackTrace::Auto" : "0",
             "Sub::Override" : "0",
             "Test::Deep" : "0",
             "Test::Fatal" : "0",
             "Test::More" : "0",
             "Test::Most" : "0",
+            "Throwable" : "0",
             "Time::HiRes" : "0",
-            "lib" : "0"
+            "lib" : "0",
+            "overload" : "0"
          }
       }
    },
@@ -97,6 +98,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS.git"
       }
    },
-   "version" : "0.09_5"
+   "version" : "0.09_6"
 }
 

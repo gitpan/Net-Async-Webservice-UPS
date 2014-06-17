@@ -23,7 +23,6 @@ my @files = (
     'lib/Net/Async/Webservice/UPS/Response/Address.pm',
     'lib/Net/Async/Webservice/UPS/Response/Rate.pm',
     'lib/Net/Async/Webservice/UPS/Service.pm',
-    'lib/Net/Async/Webservice/UPS/SyncAgentWrapper.pm',
     'lib/Net/Async/Webservice/UPS/Types.pm'
 );
 

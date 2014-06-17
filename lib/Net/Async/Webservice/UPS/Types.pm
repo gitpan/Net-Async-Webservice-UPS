@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '0.09_5';
+$Net::Async::Webservice::UPS::Types::VERSION = '0.09_6';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -8,7 +8,7 @@ use warnings;
 use Type::Library
     -base,
     -declare => qw( PickupType CustomerClassification
-                    Cache Cacheable UserAgent AsyncUserAgent
+                    Cache Cacheable
                     Address Package PackageList
                     Rate RateList
                     RequestMode Service
@@ -184,15 +184,6 @@ coerce RateList, from Rate, via { [ $_ ] };
 duck_type Cache, [qw(get set)];
 duck_type Cacheable, [qw(cache_id)];
 
-
-duck_type AsyncUserAgent, [qw(POST do_request)];
-duck_type UserAgent, [qw(post request)];
-
-coerce AsyncUserAgent, from UserAgent, via {
-    require Net::Async::Webservice::UPS::SyncAgentWrapper;
-    Net::Async::Webservice::UPS::SyncAgentWrapper->new({ua=>$_});
-};
-
 1;
 
 __END__
@@ -207,7 +198,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 0.09_5
+version 0.09_6
 
 =head1 DESCRIPTION
 
@@ -304,16 +295,6 @@ Duck type, any object with a C<get> and a C<set> method.
 =head2 C<Cacheable>
 
 Duck type, any object with a C<cache_id> method.
-
-=head2 C<AsyncUserAgent>
-
-Duck type, any object with a C<do_request> and C<POST> methods.
-Coerced from L</UserAgent> via
-L<Net::Async::Webservice::UPS::SyncAgentWrapper>.
-
-=head2 C<UserAgent>
-
-Duck type, any object with a C<request> and C<post> methods.
 
 =head1 AUTHORS
 

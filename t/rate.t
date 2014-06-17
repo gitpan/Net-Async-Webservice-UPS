@@ -23,7 +23,6 @@ my @calls;
 my $new_post = Sub::Override->new(
     'Net::Async::Webservice::UPS::post',
     sub {
-        note "my post";
         push @calls,[@_];
         $orig_post->(@_);
     }
@@ -59,14 +58,14 @@ my $argpack = {
 my $services = $ups->request_rate($argpack)->get;
 ok($services && @{$services->services},'got answer');
 cmp_deeply(\@calls,
-           [[ ignore(),'/Rate',ignore() ]],
+           [[ ignore(),re(qr{/Rate$}),ignore() ]],
            'one call to the service');
 
 my $services2 = $ups->request_rate($argpack)->get;
 ok($services2 && @{$services2->services},'got answer again');
 cmp_deeply($services2,$services,'the same answer');
 cmp_deeply(\@calls,
-           [[ ignore(),'/Rate',ignore() ]],
+           [[ ignore(),re(qr{/Rate$}),ignore() ]],
            'still only one call to the service');
 
 done_testing();

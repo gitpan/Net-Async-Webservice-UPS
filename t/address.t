@@ -23,7 +23,6 @@ my @calls;
 my $new_post = Sub::Override->new(
     'Net::Async::Webservice::UPS::post',
     sub {
-        note "my post";
         push @calls,[@_];
         $orig_post->(@_);
     }
@@ -63,13 +62,13 @@ cmp_deeply($addresses->addresses,
            'address validated',
 ) or p $addresses;
 cmp_deeply(\@calls,
-           [[ ignore(),'/AV',ignore() ]],
+           [[ ignore(),re(qr{/AV$}),ignore() ]],
            'one call to the service');
 
 my $addresses2 = $ups->validate_address($address)->get;
 cmp_deeply($addresses2,$addresses,'the same answer');
 cmp_deeply(\@calls,
-           [[ ignore(),'/AV',ignore() ]],
+           [[ ignore(),re(qr{/AV$}),ignore() ]],
            'still only one call to the service');
 
 # build with no cache
@@ -80,8 +79,8 @@ $ups = Net::Async::Webservice::UPS->new({
 my $addresses3 = $ups->validate_address($address)->get;
 cmp_deeply($addresses3,$addresses,'the same answer');
 cmp_deeply(\@calls,
-           [[ ignore(),'/AV',ignore() ],
-            [ ignore(),'/AV',ignore() ]],
+           [[ ignore(),re(qr{/AV$}),ignore() ],
+            [ ignore(),re(qr{/AV$}),ignore() ]],
            'two calls to the service');
 
 done_testing();

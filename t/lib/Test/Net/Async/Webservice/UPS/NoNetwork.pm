@@ -93,5 +93,6 @@ sub push_test_responses {
 }
 
 sub POST {}
+sub GET {}
 
 1;
