@@ -1,3 +1,6 @@
+1.0.0     2014-06-25 11:18:00+01:00 Europe/London
+ - first non-dev release
+
 0.09_6 2014-06-17
  - migrate to Net::Async::Webservice::Common (not yet released, so
    it's temporarily included in t/lib)
