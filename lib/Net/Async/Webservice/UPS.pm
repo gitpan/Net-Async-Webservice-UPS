@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.0';
+$Net::Async::Webservice::UPS::VERSION = '1.0.1';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -558,7 +558,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.0
+version 1.0.1
 
 =head1 SYNOPSIS
 
