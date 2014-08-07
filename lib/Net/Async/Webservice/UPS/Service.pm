@@ -1,12 +1,13 @@
 package Net::Async::Webservice::UPS::Service;
-$Net::Async::Webservice::UPS::Service::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Service::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Service::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
 use 5.010;
-use Types::Standard qw(Str ArrayRef);
+use Types::Standard qw(Str);
 use Net::Async::Webservice::UPS::Types ':types';
+use namespace::autoclean;
 
 # ABSTRACT: shipment service from UPS
 
@@ -115,7 +116,7 @@ Net::Async::Webservice::UPS::Service - shipment service from UPS
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 DESCRIPTION
 

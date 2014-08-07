@@ -20,12 +20,15 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Net::Async::Webservice::UPS",
   "PREREQ_PM" => {
+    "Carp" => 0,
+    "Data::Printer" => 0,
     "Encode" => 0,
     "Error::TypeTiny" => 0,
     "File::Spec" => 0,
     "Future" => 0,
     "HTTP::Request" => 0,
     "List::AllUtils" => 0,
+    "MIME::Base64" => 0,
     "Moo" => 0,
     "Net::Async::Webservice::Common" => 0,
     "Scalar::Util" => 0,
@@ -42,7 +45,6 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
-    "Data::Printer" => 0,
     "File::Temp" => 0,
     "HTTP::Response" => 0,
     "Sub::Override" => 0,
@@ -53,7 +55,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "1.0.1",
+  "VERSION" => "1.0.2",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -61,6 +63,7 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "Carp" => 0,
   "Data::Printer" => 0,
   "Encode" => 0,
   "Error::TypeTiny" => 0,
@@ -70,6 +73,7 @@ my %FallbackPrereqs = (
   "HTTP::Request" => 0,
   "HTTP::Response" => 0,
   "List::AllUtils" => 0,
+  "MIME::Base64" => 0,
   "Moo" => 0,
   "Net::Async::Webservice::Common" => 0,
   "Scalar::Util" => 0,

@@ -42,12 +42,15 @@
             "Net::Async::HTTP" : "0"
          },
          "requires" : {
+            "Carp" : "0",
+            "Data::Printer" : "0",
             "Encode" : "0",
             "Error::TypeTiny" : "0",
             "File::Spec" : "0",
             "Future" : "0",
             "HTTP::Request" : "0",
             "List::AllUtils" : "0",
+            "MIME::Base64" : "0",
             "Moo" : "0",
             "Net::Async::Webservice::Common" : "0",
             "Scalar::Util" : "0",
@@ -73,7 +76,6 @@
             "Net::Async::HTTP" : "0"
          },
          "requires" : {
-            "Data::Printer" : "0",
             "File::Temp" : "0",
             "HTTP::Response" : "0",
             "Sub::Override" : "0",
@@ -94,6 +96,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS"
       }
    },
-   "version" : "1.0.1"
+   "version" : "1.0.2"
 }
 

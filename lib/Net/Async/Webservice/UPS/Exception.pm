@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,12 +7,13 @@ use strict;
 
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::Common::Exception';
+ use namespace::autoclean;
 
 
  has package => ( is => 'ro', required => 1 );
@@ -33,12 +34,13 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.1';
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
  use Moo;
  extends 'Net::Async::Webservice::Common::Exception';
+ use namespace::autoclean;
 
 
  has error => ( is => 'ro', required => 1 );
@@ -47,15 +49,32 @@ $Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.1';
  sub error_description { $_[0]->error->{ErrorDescription} }
  sub error_severity { $_[0]->error->{ErrorSeverity} }
  sub error_code { $_[0]->error->{ErrorCode} }
+ sub error_location { $_[0]->error->{ErrorLocation} }
+ sub retry_seconds { $_[0]->error->{MinimumRetrySeconds} }
+
+ sub _error_location_str {
+     my ($self) = @_;
+     my $el = $self->error_location;
+     if ($el->{ErrorLocationElementName}) {
+         return "element ".$el->{ErrorLocationElementName};
+     }
+     elsif ($el->{ErrorLocationAttributeName}) {
+         return "attribute ".$el->{ErrorLocationAttributeName};
+     }
+     else {
+         return;
+     }
+ }
 
 
  sub as_string {
      my ($self) = @_;
 
-     return sprintf 'UPS returned an error: %s, severity %s, code %d, at %s',
+     return sprintf 'UPS returned an error: %s, severity %s, code %d, location %s, at %s',
          $self->error_description//'<undef>',
          $self->error_severity//'<undef>',
          $self->error_code//'<undef>',
+         $self->_error_location_str//'<undef>',
          $self->stack_trace->as_string;
  }
 }
@@ -74,7 +93,7 @@ Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 DESCRIPTION
 
@@ -123,8 +142,13 @@ The error data structure extracted from the UPS response.
 
 =head4 C<error_code>
 
+=head4 C<error_location>
+
+=head4 C<retry_seconds>
+
 These just return the similarly-named fields from inside L</error>:
-C<ErrorDescription>, C<ErrorSeverity> and C<ErrorCode>.
+C<ErrorDescription>, C<ErrorSeverity>, C<ErrorCode>, C<ErrorLocation>,
+C<MinimumRetrySeconds>.
 
 =head4 C<as_string>
 

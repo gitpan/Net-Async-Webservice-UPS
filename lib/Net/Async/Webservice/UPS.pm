@@ -1,11 +1,11 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
 use XML::Simple;
-use Types::Standard qw(Str Bool Object Dict Optional ArrayRef HashRef Undef);
+use Types::Standard qw(Str Int Bool Object Dict Optional ArrayRef HashRef Undef);
 use Types::URI qw(Uri);
 use Type::Params qw(compile);
 use Error::TypeTiny;
@@ -21,6 +21,11 @@ use Net::Async::Webservice::UPS::Address;
 use Net::Async::Webservice::UPS::Service;
 use Net::Async::Webservice::UPS::Response::Rate;
 use Net::Async::Webservice::UPS::Response::Address;
+use Net::Async::Webservice::UPS::Response::ShipmentConfirm;
+use Net::Async::Webservice::UPS::Response::ShipmentAccept;
+use Net::Async::Webservice::UPS::Response::PackageResult;
+use Net::Async::Webservice::UPS::Response::Image;
+use MIME::Base64;
 use Future;
 use 5.010;
 
@@ -155,10 +160,11 @@ around BUILDARGS => sub {
 
 
 sub transaction_reference {
+    my ($args) = @_;
     our $VERSION; # this, and the ||0 later, are to make it work
                   # before dzil munges it
     return {
-        CustomerContext => "Net::Async::Webservice::UPS",
+        CustomerContext => ($args->{customer_context} // "Net::Async::Webservice::UPS"),
         XpciVersion     => "".($VERSION||0),
     };
 }
@@ -178,17 +184,21 @@ sub access_as_xml {
 
 sub request_rate {
     state $argcheck = compile(Object, Dict[
-        from => Address,
+        from => Address|Shipper,
         to => Address,
         packages => PackageList,
         limit_to => Optional[ArrayRef[Str]],
         exclude => Optional[ArrayRef[Str]],
         mode => Optional[RequestMode],
         service => Optional[Service],
+        customer_context => Optional[Str],
     ]);
     my ($self,$args) = $argcheck->(@_);
     $args->{mode} ||= 'rate';
     $args->{service} ||= to_Service('GROUND');
+    if ($args->{from}->isa('Net::Async::Webservice::UPS::Address')) {
+        $args->{from} ||= $self->_shipper_from_address($args->{from});
+    }
 
     if ( $args->{exclude} && $args->{limit_to} ) {
         Error::TypeTiny::croak("You cannot use both 'limit_to' and 'exclude' at the same time");
@@ -224,7 +234,7 @@ sub request_rate {
             Request => {
                 RequestAction   => 'Rate',
                 RequestOption   =>  $args->{mode},
-                TransactionReference => $self->transaction_reference,
+                TransactionReference => $self->transaction_reference($args),
             },
             PickupType  => {
                 Code    => $code_for_pickup_type{$self->pickup_type},
@@ -232,12 +242,7 @@ sub request_rate {
             Shipment    => {
                 Service     => { Code   => $args->{service}->code },
                 Package     => [map { $_->as_hash() } @$packages],
-                Shipper     => {
-                    %{$args->{from}->as_hash('AV')},
-                    ( $self->account_number ?
-                        ( ShipperNumber => $self->account_number )
-                      : () ),
-                },
+                Shipper     => $args->{from}->as_hash('AV'),
                 ShipTo      => $args->{to}->as_hash('AV'),
             },
             ( $self->customer_classification ? (
@@ -474,6 +479,171 @@ sub validate_street_address {
 }
 
 
+sub ship_confirm {
+    state $argcheck = compile(Object, Dict[
+        from => Contact,
+        to => Contact,
+        shipper => Optional[Shipper],
+        service => Optional[Service],
+        description => Str,
+        payment => Payment,
+        label => Optional[Label],
+        packages => PackageList,
+        return_service => Optional[ReturnService],
+        customer_context => Optional[Str],
+        delivery_confirmation => Optional[Int],
+    ]);
+    my ($self,$args) = $argcheck->(@_);
+
+    $args->{service} //= to_Service('GROUND');
+    $args->{shipper} //= $self->_shipper_from_contact($args->{from});
+
+    my $packages = $args->{packages};
+
+    unless (scalar(@$packages)) {
+        Error::TypeTiny::croak("ship_confirm() was given an empty list of packages");
+    }
+    my $package_data = [map { $_->as_hash() } @$packages];
+    if ($args->{delivery_confirmation}) {
+        for my $p (@$package_data) {
+            $p->{PackageServiceOptions}{DeliveryConfirmation}{DCISType} =
+                $args->{delivery_confirmation};
+        }
+    }
+
+    my %data = (
+        ShipmentConfirmRequest => {
+            Request => {
+                TransactionReference => $self->transaction_reference($args),
+                RequestAction => 'ShipConfirm',
+                RequestOption => 'validate', # this makes the request
+                                             # fail if there are
+                                             # address problems
+            },
+            Shipment => {
+                Service => { Code => $args->{service}->code },
+                Description => $args->{description},
+                ( $args->{return_service} ? (
+                    ReturnService => { Code => $args->{return_service}->code }
+                ) : () ),
+                Shipper => $args->{shipper}->as_hash,
+                ( $args->{from} ? ( ShipFrom => $args->{from}->as_hash ) : () ),
+                ShipTo => $args->{to}->as_hash,
+                PaymentInformation => $args->{payment}->as_hash,
+                Package => $package_data,
+            },
+            ( $args->{label} ? ( LabelSpecification => $args->{label}->as_hash ) : () ),
+        }
+    );
+
+    $self->xml_request({
+        data => \%data,
+        url_suffix => '/ShipConfirm',
+    })->transform(
+        done => sub {
+            my ($response) = @_;
+
+            my $weight = $response->{BillingWeight};
+            my $charges = $response->{ShipmentCharges};
+
+            return Net::Async::Webservice::UPS::Response::ShipmentConfirm->new({
+                unit => $weight->{UnitOfMeasurement}{Code},
+                billing_weight => $weight->{Weight},
+                currency => $charges->{TotalCharges}{CurrencyCode},
+                service_option_charges => $charges->{ServiceOptionsCharges}{MonetaryValue},
+                transportation_charges => $charges->{TransportationCharges}{MonetaryValue},
+                total_charges => $charges->{TotalCharges}{MonetaryValue},
+                shipment_digest => $response->{ShipmentDigest},
+                shipment_identification_number => $response->{ShipmentIdentificationNumber},
+            });
+        },
+    );
+}
+
+
+sub _img_if($$) {
+    return ( $_[0] => Net::Async::Webservice::UPS::Response::Image->from_hash($_[1]) ) if $_[1] && %{$_[1]};
+    return;
+}
+
+sub _pair_if($$) {
+    return @_ if $_[1];
+    return;
+}
+
+sub _base64_if($$) {
+    return ($_[0],decode_base64($_[1])) if $_[1];
+    return;
+}
+
+sub ship_accept {
+    state $argcheck = compile( Object, Dict[
+        confirm => ShipmentConfirm,
+        customer_context => Optional[Str],
+    ]);
+    my ($self,$args) = $argcheck->(@_);
+
+    my %data = (
+        ShipmentAcceptRequest => {
+            Request => {
+                TransactionReference => $self->transaction_reference($args),
+                RequestAction => 'ShipAccept',
+            },
+            ShipmentDigest => $args->{confirm}->shipment_digest,
+        },
+    );
+
+    $self->xml_request({
+        data => \%data,
+        url_suffix => '/ShipAccept',
+    })->transform(
+        done => sub {
+            my ($response) = @_;
+            use Data::Printer;
+
+            my $results = $response->{ShipmentResults};
+
+            my $weight = $results->{BillingWeight};
+            my $charges = $results->{ShipmentCharges};
+
+            return Net::Async::Webservice::UPS::Response::ShipmentAccept->new({
+                unit => $weight->{UnitOfMeasurement}{Code},
+                billing_weight => $weight->{Weight},
+                currency => $charges->{TotalCharges}{CurrencyCode},
+                service_option_charges => $charges->{ServiceOptionsCharges}{MonetaryValue},
+                transportation_charges => $charges->{TransportationCharges}{MonetaryValue},
+                total_charges => $charges->{TotalCharges}{MonetaryValue},
+                shipment_identification_number => $results->{ShipmentIdentificationNumber},
+                _pair_if( pickup_request_number => $results->{PickupRequestNumber} ),
+                _img_if( control_log => $results->{ControlLogReceipt} ),
+                package_results => [ map {
+                    my $pr = $_;
+
+                    Net::Async::Webservice::UPS::Response::PackageResult->new({
+                        tracking_number => $pr->{TrackingNumber},
+                        currency => $pr->{ServiceOptionsCharges}{CurrencyCode},
+                        service_option_charges => $pr->{ServiceOptionsCharges}{MonetaryValue},
+                        _img_if( label => $pr->{LabelImage} ),
+                        ( $pr->{LabelImage}{InternationalSignatureGraphicImage} ?
+                          ( signature => Net::Async::Webservice::UPS::Response::Image->new({
+                              format => $pr->{LabelImage}{ImageFormat}{Code},
+                              base64_data => $pr->{LabelImage}{InternationalSignatureGraphicImage},
+                          }) ) : () ),
+                        _base64_if( html => $pr->{LabelImage}{HTMLImage} ),
+                        _base64_if( pdf417 => $pr->{LabelImage}{PDF417} ),
+                        _img_if( receipt => $pr->{Receipt} ),
+                        _img_if( form_image => $pr->{Form} ),
+                        _pair_if( form_code => $pr->{Form}{Code} ),
+                        _pair_if( form_group_id => $pr->{FormGroupId} ),
+                        _img_if( cod_turn_in => $pr->{CODTurnInPage} ),
+                    });
+                } @{$results->{PackageResults}//[]} ],
+            });
+        },
+    );
+}
+
+
 sub xml_request {
     state $argcheck = compile(
         Object,
@@ -544,6 +714,30 @@ sub generate_cache_key {
         );
 }
 
+sub _shipper_from_address {
+    my ($self,$addr) = @_;
+
+    require Net::Async::Webservice::UPS::Shipper;
+
+    return Net::Async::Webservice::UPS::Shipper->new({
+        address => $addr,
+        ( $self->account_number ? ( account_number => $self->account_number ) : () ),
+    });
+}
+
+sub _shipper_from_contact {
+    my ($self,$contact) = @_;
+
+    return $contact if $contact->isa('Net::Async::Webservice::UPS::Shipper');
+
+    require Net::Async::Webservice::UPS::Shipper;
+
+    return Net::Async::Webservice::UPS::Shipper->new({
+        %$contact, # ugly!
+        ( $self->account_number ? ( account_number => $self->account_number ) : () ),
+    });
+}
+
 1;
 
 __END__
@@ -558,7 +752,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 SYNOPSIS
 
@@ -800,6 +994,10 @@ defaults to C<rate>, could be C<shop>
 
 defaults to C<GROUND>, see L<Net::Async::Webservice::UPS::Service>
 
+=item C<customer_context>
+
+optional string for reference purposes
+
 =back
 
 The L<Future> returned will yield an instance of
@@ -841,6 +1039,95 @@ L<Net::Async::Webservice::UPS::Response::Address>, or fail with an
 exception.
 
 Identical requests can be cached.
+
+=head2 C<ship_confirm>
+
+  my $shipconfirm_response = $usp->ship_confirm({
+     from => $source_contact,
+     to => $destination_contact,
+     description => 'something',
+     payment => $payment_method,
+     packages => \@packages,
+  });
+
+Performs a C<ShipConfirm> request to UPS. The parameters are:
+
+=over 4
+
+=item C<from>
+
+required, instance of L<Net::Async::Webservice::UPS::Contact>, where the shipments starts from
+
+=item C<to>
+
+required, instance of L<Net::Async::Webservice::UPS::Contact>, where the shipments has to be delivered to
+
+=item C<shipper>
+
+optional, instance of L<Net::Async::Webservice::UPS::Shipper>, who is requesting the shipment; if not specified, it's taken to be the same as the C<from> with the L</account_number> of this UPS object
+
+=item C<service>
+
+the shipping service to use, see L<Net::Async::Webservice::UPS::Types/Service>, defaults to C<GROUND>
+
+=item C<description>
+
+required string, description of the shipment
+
+=item C<payment>
+
+required instance of L<Net::Async::Webservice::UPS::Payment>, how to pay for this shipment
+
+=item C<label>
+
+optional instance of L<Net::Async::Webservice::UPS::Label>, what kind of label to request
+
+=item C<packages>
+
+an arrayref of L<Net::Async::Webservice::UPS::Package> (or a single package, will be coerced to a 1-element array ref), the packages to ship
+
+=item C<return_service>
+
+optional, instance of L<Net::Async::Webservice::UPS::ReturnService>, what kind of return service to request
+
+=item C<delivery_confirmation>
+
+optional, 1 means "signature required", 2 mean "adult signature required"
+
+=item C<customer_context>
+
+optional string for reference purposes
+
+=back
+
+Returns an instance of
+L<Net::Async::Webservice::UPS::Response::ShipmentConfirm>.
+
+B<NOTE>: the API of this call may change in the future, let me know if
+features you need are missing or badly understood!
+
+=head2 C<ship_accept>
+
+  my $shipaccept_response = $usp->ship_accept({
+      confirm => $shipconfirm_response,
+  });
+
+Performs a C<ShipAccept> request to UPS. The parameters are:
+
+=over 4
+
+=item C<confirm>
+
+required, instance of L<Net::Async::Webservice::UPS::Response::ShipmentConfirm>,as returned by L</ship_confirm>
+
+=item C<customer_context>
+
+optional string for reference purposes
+
+=back
+
+Returns an instance of
+L<Net::Async::Webservice::UPS::Response::ShipmentAccept>.
 
 =head2 C<xml_request>
 

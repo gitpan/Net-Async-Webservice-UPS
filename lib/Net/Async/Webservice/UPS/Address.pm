@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Address;
-$Net::Async::Webservice::UPS::Address::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Address::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Address::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,6 +7,7 @@ use Moo;
 use 5.010;
 use Types::Standard qw(Str Int Bool StrictNum);
 use Net::Async::Webservice::UPS::Types ':types';
+use namespace::autoclean;
 
 # ABSTRACT: an address for UPS
 
@@ -178,6 +179,19 @@ sub as_hash {
             }
         }
     }
+    elsif ($shape eq 'Ship') {
+        return {
+            Address => {
+                CountryCode => $self->country_code || "US",
+                PostalCode  => $self->postal_code,
+                ( $self->address ? ( AddressLine1 => $self->address ) : () ),
+                ( $self->address2 ? ( AddressLine3 => $self->address2 ) : () ),
+                ( $self->address3 ? ( AddressLine3 => $self->address3 ) : () ),
+                ( $self->city ? ( City => $self->city) : () ),
+                ( $self->state ? ( StateProvinceCode => $self->state) : () ),
+            }
+        }
+    }
     else {
         die "bad address to_hash shape $shape";
     }
@@ -213,7 +227,7 @@ Net::Async::Webservice::UPS::Address - an address for UPS
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 ATTRIBUTES
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Types::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -11,11 +11,15 @@ use Type::Library
                     Cache Cacheable
                     Address Package PackageList
                     Rate RateList
-                    RequestMode Service
+                    RequestMode Service ReturnService
                     ServiceCode ServiceLabel
+                    ReturnServiceCode ReturnServiceLabel
+                    CreditCardCode CreditCardType
                     PackagingType MeasurementSystem
                     Measure MeasurementUnit Currency
-                    Tolerance
+                    Tolerance Payment ImageType Image
+                    Contact Shipper CreditCard Label
+                    ShipmentConfirm PackageResult
               );
 use Type::Utils -all;
 use Types::Standard -types;
@@ -111,6 +115,30 @@ enum PackagingType,
    )];
 
 
+enum CreditCardCode,
+    [qw(
+           01
+           03
+           04
+           05
+           06
+           07
+           08
+   )];
+
+
+enum CreditCardType,
+    [qw(
+           AMEX
+           Discover
+           MasterCard
+           Optima
+           VISA
+           Bravo
+           Diners
+   )];
+
+
 enum MeasurementSystem,
     [qw(
            metric
@@ -164,9 +192,45 @@ coerce Address, from Str, via {
 };
 
 
+class_type Contact, { class => 'Net::Async::Webservice::UPS::Contact' };
+coerce Contact, from Address, via {
+    require Net::Async::Webservice::UPS::Contact;
+    Net::Async::Webservice::UPS::Contact->new({address=>$_});
+};
+
+
+class_type Shipper, { class => 'Net::Async::Webservice::UPS::Shipper' };
+
+
+class_type Payment, { class => 'Net::Async::Webservice::UPS::Payment' };
+
+
+class_type CreditCard, { class => 'Net::Async::Webservice::UPS::CreditCard' };
+
+
+enum ImageType, [qw(EPL ZPL SPL STARPL GIF)];
+
+
+class_type Image, { class => 'Net::Async::Webservice::UPS::Response::Image' };
+coerce Image, from HashRef, via {
+    require Net::Async::Webservice::UPS::Response::Image;
+    Net::Async::Webservice::UPS::Response::Image->from_hash($_);
+};
+
+
+class_type Label, { class => 'Net::Async::Webservice::UPS::Label' };
+coerce Label, from Str, via {
+    require Net::Async::Webservice::UPS::Label;
+    Net::Async::Webservice::UPS::Label->new({ code => $_ });
+};
+
+
 class_type Package, { class => 'Net::Async::Webservice::UPS::Package' };
 declare PackageList, as ArrayRef[Package];
 coerce PackageList, from Package, via { [ $_ ] };
+
+
+class_type PackageResult, { class => 'Net::Async::Webservice::UPS::Response::PackageResult' };
 
 
 class_type Service, { class => 'Net::Async::Webservice::UPS::Service' };
@@ -176,9 +240,39 @@ coerce Service, from Str, via {
 };
 
 
+class_type ReturnService, { class => 'Net::Async::Webservice::UPS::ReturnService' };
+coerce ReturnService, from Str, via {
+    require Net::Async::Webservice::UPS::ReturnService;
+    Net::Async::Webservice::UPS::ReturnService->new({label=>$_});
+};
+
+
+enum ReturnServiceCode,
+    [qw(
+           2
+           3
+           5
+           8
+           9
+   )];
+
+
+enum ReturnServiceLabel,
+    [qw(
+           PNM
+           RS1
+           RS3
+           ERL
+           PRL
+   )];
+
+
 class_type Rate, { class => 'Net::Async::Webservice::UPS::Rate' };
 declare RateList, as ArrayRef[Rate];
 coerce RateList, from Rate, via { [ $_ ] };
+
+
+class_type ShipmentConfirm, { class => 'Net::Async::Webservice::UPS::Response::ShipmentConfirm' };
 
 
 duck_type Cache, [qw(get set)];
@@ -198,7 +292,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 DESCRIPTION
 
@@ -240,6 +334,15 @@ C<TODAY_DEDICATED_COURIER> C<TODAY_STANDARD>
 Enum, one of C<LETTER> C<PACKAGE> C<TUBE> C<UPS_PAK>
 C<UPS_EXPRESS_BOX> C<UPS_25KG_BOX> C<UPS_10KG_BOX>
 
+=head2 C<CreditCardCode>
+
+Enum, one of C<01> C<03> C<04> C<05> C<06> C<07> C<08>
+
+=head2 C<CreditCardType>
+
+Enum, one of C<AMEX> C<Discover> C<MasterCard> C<Optima> C<VISA>
+C<Bravo> C<Diners>.
+
 =head2 C<MeasurementSystem>
 
 Enum, one of C<metric> C<english>.
@@ -265,6 +368,37 @@ Number between 0 and 1.
 Instance of L<Net::Async::Webservice::UPS::Address>, with automatic
 coercion from string (interpreted as a US postal code).
 
+=head2 C<Contact>
+
+Instance of L<Net::Async::Webservice::UPS::Contact>.
+
+=head2 C<Shipper>
+
+Instance of L<Net::Async::Webservice::UPS::Shipper>.
+
+=head2 C<Payment>
+
+Instance of L<Net::Async::Webservice::UPS::Payment>.
+
+=head2 C<CreditCard>
+
+Instance of L<Net::Async::Webservice::UPS::CreditCard>.
+
+=head2 C<ImageType>
+
+Enum, one of C<EPL>, C<ZPL>, C<SPL>, C<STARPL>, C<GIF>.
+
+=head2 C<Image>
+
+Instance of L<Net::Async::Webservice::UPS::Response::Image>, with
+automatic coercion from hashref (via
+L<Net::Async::Webservice::UPS::Response::Image/from_hash>).
+
+=head2 C<Label>
+
+Instance of L<Net::Async::Webservice::UPS::Label>, with automatic
+coercion from string (interpreted as a label code).
+
 =head2 C<Package>
 
 Instance of L<Net::Async::Webservice::UPS::Package>.
@@ -274,10 +408,27 @@ Instance of L<Net::Async::Webservice::UPS::Package>.
 Array ref of packages, with automatic coercion from a single package
 to a singleton array.
 
+=head2 C<PackageResult>
+
+Instance of L<Net::Async::Webservice::UPS::Response::PackageResult>.
+
 =head2 C<Service>
 
 Instance of L<Net::Async::Webservice::UPS::Service>, with automatic
 coercion from string (interpreted as a service label).
+
+=head2 C<ReturnService>
+
+Instance of L<Net::Async::Webservice::UPS::ReturnService>, with automatic
+coercion from string (interpreted as a service label).
+
+=head2 C<ReturnServiceCode>
+
+Enum, one of C<2> C<3> C<5> C<8> C<9>
+
+=head2 C<ReturnServiceLabel>
+
+Enum, one of C<PNM> C<RS1> C<RS3> C<ERL> C<PRL>
 
 =head2 C<Rate>
 
@@ -287,6 +438,10 @@ Instance of L<Net::Async::Webservice::UPS::Rate>.
 
 Array ref of rates, with automatic coercion from a single rate to a
 singleton array.
+
+=head2 C<ShipmentConfirm>
+
+Instance of L<Net::Async::Webservice::UPS::Response::ShipmentConfirm>.
 
 =head2 C<Cache>
 

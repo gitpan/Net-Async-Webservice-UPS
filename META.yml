@@ -4,7 +4,6 @@ author:
   - 'Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>'
   - 'Sherzod B. Ruzmetov <sherzodr@cpan.org>'
 build_requires:
-  Data::Printer: '0'
   File::Temp: '0'
   HTTP::Response: '0'
   Sub::Override: '0'
@@ -32,12 +31,15 @@ recommends:
   LWP::UserAgent: '0'
   Net::Async::HTTP: '0'
 requires:
+  Carp: '0'
+  Data::Printer: '0'
   Encode: '0'
   Error::TypeTiny: '0'
   File::Spec: '0'
   Future: '0'
   HTTP::Request: '0'
   List::AllUtils: '0'
+  MIME::Base64: '0'
   Moo: '0'
   Net::Async::Webservice::Common: '0'
   Scalar::Util: '0'
@@ -55,4 +57,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 1.0.1
+version: 1.0.2

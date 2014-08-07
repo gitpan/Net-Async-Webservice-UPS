@@ -5,6 +5,8 @@ use Test::Most;
 use Data::Printer;
 use Net::Async::Webservice::UPS::Package;
 use Net::Async::Webservice::UPS::Address;
+use Net::Async::Webservice::UPS::Payment;
+use Net::Async::Webservice::UPS::Shipper;
 
 sub conf_file {
     my $upsrc = $ENV{NAWS_UPS_CONFIG} || File::Spec->catfile($ENV{HOME}, '.naws_ups.conf');
@@ -55,6 +57,23 @@ sub test_it {
             ),
         ),
     } @postal_codes;
+
+    my @street_addresses = (Net::Async::Webservice::UPS::Address->new({
+        name        => 'Some Place',
+        address     => '2231 E State Route 78',
+        city        => 'East Lansing',
+        state       => 'MI',
+        country_code=> 'US',
+        postal_code => '48823',
+    }), Net::Async::Webservice::UPS::Address->new({
+        name        => 'John Doe',
+        building_name => 'Pearl Hotel',
+        address     => '233 W 49th St',
+        city        => 'New York',
+        state       => "NY",
+        country_code=> "US",
+        postal_code => "10019",
+    }) );
 
     my @packages = (
         Net::Async::Webservice::UPS::Package->new(
@@ -320,17 +339,7 @@ sub test_it {
     };
 
     subtest 'validate address, street-level' => sub {
-        my $address = Net::Async::Webservice::UPS::Address->new({
-            name        => 'John Doe',
-            building_name => 'Pearl Hotel',
-            address     => '233 W 49th St',
-            city        => 'New York',
-            state       => "NY",
-            country_code=> "US",
-            postal_code => "10019",
-        });
-
-        my $addresses = $ups->validate_street_address($address)->get;
+        my $addresses = $ups->validate_street_address($street_addresses[1])->get;
 
         cmp_deeply(
             $addresses,
@@ -351,6 +360,116 @@ sub test_it {
             ),
             'sensible address returned',
         ) or note p $addresses;
+    };
+
+    subtest 'validate address, non-ASCII' => sub {
+        my $address = Net::Async::Webservice::UPS::Address->new({
+            name        => "Snowman \x{2603}",
+        address     => '233 W 49th St',
+        city        => 'New York',
+        state       => "NY",
+        country_code=> "US",
+        postal_code => "10019",
+#            address     => "St\x{e4}ndehausstra\x{df}e 1",
+#            city        => "D\x{fc}sseldorf",
+#            country_code=> 'DE',
+#            postal_code => '40217',
+        });
+        my $validated = $ups->validate_street_address($address)->get;
+
+        cmp_deeply(
+            $validated,
+            methods(
+                warnings => undef,
+                addresses => [
+                    all(
+                        isa('Net::Async::Webservice::UPS::Address'),
+                        methods(
+                            city => re(qr{\ANew York\z}i),
+                            state => "NY",
+                            country_code=> "US",
+                            postal_code_extended => '7404',
+                            quality => 1,
+                        ),
+                    ),
+                ],
+            ),
+            'sensible address returned',
+        ) or note p $validated;
+    };
+
+    my $bill_shipper = Net::Async::Webservice::UPS::Payment->new({
+        method => 'prepaid',
+        account_number => $ups->account_number,
+    });
+
+    my $shipper = Net::Async::Webservice::UPS::Shipper->new({
+        name => 'Test Shipper',
+        company_name => 'Test Shipper Company',
+        address => $street_addresses[0],
+        account_number => $ups->account_number,
+    });
+
+    my $destination = Net::Async::Webservice::UPS::Contact->new({
+        name => 'Test Contact',
+        company_name => 'Test Contact Company',
+        address => $street_addresses[1],
+    });
+
+    subtest 'book shipment' => sub {
+        my $confirm = $ups->ship_confirm({
+            from => $shipper,
+            to => $destination,
+            shipper => $shipper,
+            packages => \@packages,
+            description => 'Testing packages',
+            payment => $bill_shipper,
+            label => 'EPL',
+        })->get;
+        cmp_deeply(
+            $confirm,
+            methods(
+                billing_weight => num(3),
+                unit => 'LBS',
+                currency => 'USD',
+            ),
+            'shipment confirm worked',
+        );
+        cmp_deeply(
+            $confirm->transportation_charges + $confirm->service_option_charges,
+            num($confirm->total_charges,0.01),
+            'charges add up',
+        );
+        ok($confirm->shipment_digest,'we have a digest');
+        ok($confirm->shipment_identification_number,'we have an id number');
+
+        my $accept = $ups->ship_accept({
+            confirm => $confirm,
+        })->get;
+
+        cmp_deeply(
+            $accept,
+            methods(
+                billing_weight => num(3),
+                unit => 'LBS',
+                currency => 'USD',
+                service_option_charges => num($confirm->service_option_charges),
+                transportation_charges => num($confirm->transportation_charges),
+                total_charges => num($confirm->total_charges),
+                shipment_identification_number => $confirm->shipment_identification_number,
+                package_results => [
+                    (
+                        all(
+                            isa('Net::Async::Webservice::UPS::Response::PackageResult'),
+                            methods(
+                                label => isa('Net::Async::Webservice::UPS::Response::Image'),
+                            ),
+                        )
+                    ) x @packages
+                ],
+            ),
+            'shipment accept worked',
+        );
     };
 }
 

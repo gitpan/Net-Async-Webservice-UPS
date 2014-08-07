@@ -1,3 +1,7 @@
+1.0.2     2014-08-07 13:22:45+01:00 Europe/London
+ - implement ship_confirm and ship_accent (API in flux, useful
+   features probably missing, but it's a start)
+
 1.0.1     2014-07-29 11:22:31+01:00 Europe/London
  - use SingleEncoding (thanks sergeyromanov)
 

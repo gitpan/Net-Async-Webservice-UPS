@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Rate;
-$Net::Async::Webservice::UPS::Rate::VERSION = '1.0.1';
+$Net::Async::Webservice::UPS::Rate::VERSION = '1.0.2';
 {
   $Net::Async::Webservice::UPS::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,6 +7,7 @@ use Moo;
 use 5.010;
 use Types::Standard qw(Str ArrayRef);
 use Net::Async::Webservice::UPS::Types ':types';
+use namespace::autoclean;
 
 # ABSTRACT: shipment rate from UPS
 
@@ -81,7 +82,7 @@ Net::Async::Webservice::UPS::Rate - shipment rate from UPS
 
 =head1 VERSION
 
-version 1.0.1
+version 1.0.2
 
 =head1 DESCRIPTION
 
