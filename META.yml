@@ -14,9 +14,9 @@ build_requires:
   Time::HiRes: '0'
   lib: '0'
 configure_requires:
-  ExtUtils::MakeMaker: '6.30'
+  ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142060'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -57,4 +57,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 1.0.2
+version: 1.0.3

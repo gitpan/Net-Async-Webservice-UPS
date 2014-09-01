@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,7 +7,7 @@ use strict;
 
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -34,7 +34,7 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.2';
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -70,7 +70,7 @@ $Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.2';
  sub as_string {
      my ($self) = @_;
 
-     return sprintf 'UPS returned an error: %s, severity %s, code %d, location %s, at %s',
+     return sprintf 'UPS returned an error: %s, severity %s, code %s, location %s, at %s',
          $self->error_description//'<undef>',
          $self->error_severity//'<undef>',
          $self->error_code//'<undef>',
@@ -93,7 +93,7 @@ Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 DESCRIPTION
 
@@ -171,7 +171,7 @@ Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Net-a-porter.com.
+This software is copyright (c) 2014 by Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

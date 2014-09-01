@@ -5,7 +5,7 @@
       "Sherzod B. Ruzmetov <sherzodr@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640",
+   "generated_by" : "Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142060",
    "license" : [
       "perl_5"
    ],
@@ -22,7 +22,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.30"
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "develop" : {
@@ -96,6 +96,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS"
       }
    },
-   "version" : "1.0.2"
+   "version" : "1.0.3"
 }
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -433,14 +433,15 @@ sub validate_street_address {
                 return Future->new->fail(Net::Async::Webservice::UPS::Exception::UPSError->new({
                     error => {
                         ErrorDescription => 'The Address Matching System is not able to match an address from any other one in the database',
+                        ErrorCode => 'NoCandidates',
                     },
-                    'ups',
-                }));
+                }),'ups');
             }
             if ($response->{AmbiguousAddressIndicator}) {
                 return Future->new->fail(Net::Async::Webservice::UPS::Exception::UPSError->new({
                     error => {
                         ErrorDescription => 'The Address Matching System is not able to explicitly differentiate an address from any other one in the database',
+                        ErrorCode => 'AmbiguousAddress',
                     },
                 }),'ups');
             }
@@ -450,9 +451,10 @@ sub validate_street_address {
                 $quality = 1;
             }
 
-            my $address;
-            if (my $ak = $response->{AddressKeyFormat}) {
-                $address = Net::Async::Webservice::UPS::Address->new({
+            my @addresses;my $aks = $response->{AddressKeyFormat};
+            if (ref($aks) ne 'ARRAY') { $aks = [ $aks ] };
+            for my $ak (@$aks) {
+                push @addresses, Net::Async::Webservice::UPS::Address->new({
                     quality => $quality,
                     building_name => $ak->{BuildingName},
                     address => $ak->{AddressLine}->[0],
@@ -468,7 +470,7 @@ sub validate_street_address {
             }
 
             my $ret = Net::Async::Webservice::UPS::Response::Address->new({
-                addresses => [ $address ? $address : () ],
+                addresses => \@addresses,
                 ( $response->{Error} ? (warnings => $response->{Error}) : () ),
             });
 
@@ -752,7 +754,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 SYNOPSIS
 
@@ -1018,7 +1020,7 @@ C<$address> is an instance of L<Net::Async::Webservice::UPS::Address>,
 or a postcode string that will be coerced to an address.
 
 Optional parameter: a tolerance (float, between 0 and 1). Returned
-addresses with quality below the tolerance will be filtered out.
+addresses with quality below 1 minus tolerance will be filtered out.
 
 The L<Future> returned will yield an instance of
 L<Net::Async::Webservice::UPS::Response::Address>, or fail with an
@@ -1187,7 +1189,7 @@ Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Net-a-porter.com.
+This software is copyright (c) 2014 by Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

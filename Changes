@@ -1,3 +1,8 @@
+1.0.3     2014-09-01 13:57:30+01:00 Europe/London
+ - incorporate patch from RT #98219, in case AddressKeyFormat is
+   returned multiple times
+ - fix exception reporting for invalid street-level addresses
+
 1.0.2     2014-08-07 13:22:45+01:00 Europe/London
  - implement ship_confirm and ship_accent (API in flux, useful
    features probably missing, but it's a start)

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Types::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -190,6 +190,7 @@ coerce Address, from Str, via {
     require Net::Async::Webservice::UPS::Address;
     Net::Async::Webservice::UPS::Address->new({postal_code => $_});
 };
+Address->coercion->freeze;
 
 
 class_type Contact, { class => 'Net::Async::Webservice::UPS::Contact' };
@@ -197,6 +198,7 @@ coerce Contact, from Address, via {
     require Net::Async::Webservice::UPS::Contact;
     Net::Async::Webservice::UPS::Contact->new({address=>$_});
 };
+Contact->coercion->freeze;
 
 
 class_type Shipper, { class => 'Net::Async::Webservice::UPS::Shipper' };
@@ -216,6 +218,7 @@ coerce Image, from HashRef, via {
     require Net::Async::Webservice::UPS::Response::Image;
     Net::Async::Webservice::UPS::Response::Image->from_hash($_);
 };
+Image->coercion->freeze;
 
 
 class_type Label, { class => 'Net::Async::Webservice::UPS::Label' };
@@ -223,11 +226,13 @@ coerce Label, from Str, via {
     require Net::Async::Webservice::UPS::Label;
     Net::Async::Webservice::UPS::Label->new({ code => $_ });
 };
+Label->coercion->freeze;
 
 
 class_type Package, { class => 'Net::Async::Webservice::UPS::Package' };
 declare PackageList, as ArrayRef[Package];
 coerce PackageList, from Package, via { [ $_ ] };
+PackageList->coercion->freeze;
 
 
 class_type PackageResult, { class => 'Net::Async::Webservice::UPS::Response::PackageResult' };
@@ -238,6 +243,7 @@ coerce Service, from Str, via {
     require Net::Async::Webservice::UPS::Service;
     Net::Async::Webservice::UPS::Service->new({label=>$_});
 };
+Service->coercion->freeze;
 
 
 class_type ReturnService, { class => 'Net::Async::Webservice::UPS::ReturnService' };
@@ -245,6 +251,7 @@ coerce ReturnService, from Str, via {
     require Net::Async::Webservice::UPS::ReturnService;
     Net::Async::Webservice::UPS::ReturnService->new({label=>$_});
 };
+ReturnService->coercion->freeze;
 
 
 enum ReturnServiceCode,
@@ -270,6 +277,7 @@ enum ReturnServiceLabel,
 class_type Rate, { class => 'Net::Async::Webservice::UPS::Rate' };
 declare RateList, as ArrayRef[Rate];
 coerce RateList, from Rate, via { [ $_ ] };
+RateList->coercion->freeze;
 
 
 class_type ShipmentConfirm, { class => 'Net::Async::Webservice::UPS::Response::ShipmentConfirm' };
@@ -292,7 +300,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 DESCRIPTION
 
@@ -467,7 +475,7 @@ Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Net-a-porter.com.
+This software is copyright (c) 2014 by Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

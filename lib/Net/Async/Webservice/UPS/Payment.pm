@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Payment;
-$Net::Async::Webservice::UPS::Payment::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Payment::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Payment::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -107,7 +107,7 @@ Net::Async::Webservice::UPS::Payment - a payment method for UPS shipments
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 ATTRIBUTES
 
@@ -159,7 +159,7 @@ Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Net-a-porter.com.
+This software is copyright (c) 2014 by Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

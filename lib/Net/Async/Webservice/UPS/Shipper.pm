@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Shipper;
-$Net::Async::Webservice::UPS::Shipper::VERSION = '1.0.2';
+$Net::Async::Webservice::UPS::Shipper::VERSION = '1.0.3';
 {
   $Net::Async::Webservice::UPS::Shipper::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -52,7 +52,7 @@ Net::Async::Webservice::UPS::Shipper - a contact with an account number
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 DESCRIPTION
 
@@ -95,7 +95,7 @@ Sherzod B. Ruzmetov <sherzodr@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Net-a-porter.com.
+This software is copyright (c) 2014 by Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
