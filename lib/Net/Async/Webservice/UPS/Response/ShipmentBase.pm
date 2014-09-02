@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::ShipmentBase;
-$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentBase::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -73,7 +73,7 @@ Net::Async::Webservice::UPS::Response::ShipmentBase - base class for UPS shipmen
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 ATTRIBUTES
 

@@ -48,7 +48,7 @@ requires:
   Type::Library: '0'
   Type::Params: '0'
   Type::Utils: '0'
-  Types::Standard: '0'
+  Types::Standard: '1.000003'
   Types::URI: '0'
   XML::Simple: '0'
   namespace::autoclean: '0'
@@ -57,4 +57,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 1.0.3
+version: 1.0.4

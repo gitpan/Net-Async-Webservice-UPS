@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Address;
-$Net::Async::Webservice::UPS::Address::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Address::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Address::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -227,7 +227,7 @@ Net::Async::Webservice::UPS::Address - an address for UPS
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 ATTRIBUTES
 

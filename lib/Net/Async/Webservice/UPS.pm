@@ -1,11 +1,11 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
 use XML::Simple;
-use Types::Standard qw(Str Int Bool Object Dict Optional ArrayRef HashRef Undef);
+use Types::Standard 1.000003 qw(Str Int Bool Object Dict Optional ArrayRef HashRef Undef);
 use Types::URI qw(Uri);
 use Type::Params qw(compile);
 use Error::TypeTiny;
@@ -754,7 +754,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 SYNOPSIS
 

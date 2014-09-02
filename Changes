@@ -1,3 +1,7 @@
+1.0.4     2014-09-02 09:54:21+01:00 Europe/London
+ - bump requirement of Types::Standard to get fix for RT #98362; it
+   caused spurious parameter checking failures
+
 1.0.3     2014-09-01 13:57:30+01:00 Europe/London
  - incorporate patch from RT #98219, in case AddressKeyFormat is
    returned multiple times

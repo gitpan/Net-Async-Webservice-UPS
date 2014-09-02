@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Rate;
-$Net::Async::Webservice::UPS::Response::Rate::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Response::Rate::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Response::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -38,7 +38,7 @@ Net::Async::Webservice::UPS::Response::Rate - response for request_rate
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 DESCRIPTION
 

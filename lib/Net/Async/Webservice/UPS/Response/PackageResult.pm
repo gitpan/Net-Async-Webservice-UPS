@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::PackageResult;
-$Net::Async::Webservice::UPS::Response::PackageResult::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Response::PackageResult::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Response::PackageResult::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -108,7 +108,7 @@ Net::Async::Webservice::UPS::Response::PackageResult - information about a packa
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 DESCRIPTION
 

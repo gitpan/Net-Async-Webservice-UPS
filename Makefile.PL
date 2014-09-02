@@ -37,7 +37,7 @@ my %WriteMakefileArgs = (
     "Type::Library" => 0,
     "Type::Params" => 0,
     "Type::Utils" => 0,
-    "Types::Standard" => 0,
+    "Types::Standard" => "1.000003",
     "Types::URI" => 0,
     "XML::Simple" => 0,
     "namespace::autoclean" => 0,
@@ -55,7 +55,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "1.0.3",
+  "VERSION" => "1.0.4",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -88,7 +88,7 @@ my %FallbackPrereqs = (
   "Type::Library" => 0,
   "Type::Params" => 0,
   "Type::Utils" => 0,
-  "Types::Standard" => 0,
+  "Types::Standard" => "1.000003",
   "Types::URI" => 0,
   "XML::Simple" => 0,
   "lib" => 0,

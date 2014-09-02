@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Exception;
-$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Exception::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,7 +7,7 @@ use strict;
 
 
 {package Net::Async::Webservice::UPS::Exception::BadPackage;
-$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Exception::BadPackage::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -34,7 +34,7 @@ $Net::Async::Webservice::UPS::Exception::BadPackage::VERSION = '1.0.3';
 }
 
 {package Net::Async::Webservice::UPS::Exception::UPSError;
-$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.3';
+$Net::Async::Webservice::UPS::Exception::UPSError::VERSION = '1.0.4';
 {
   $Net::Async::Webservice::UPS::Exception::UPSError::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -93,7 +93,7 @@ Net::Async::Webservice::UPS::Exception
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 DESCRIPTION
 
