@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Contact;
-$Net::Async::Webservice::UPS::Contact::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Contact::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Contact::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -91,7 +91,7 @@ Net::Async::Webservice::UPS::Contact - a "contact" for UPS
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 DESCRIPTION
 

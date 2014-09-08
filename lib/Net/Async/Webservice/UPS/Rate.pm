@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Rate;
-$Net::Async::Webservice::UPS::Rate::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Rate::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -14,7 +14,7 @@ use namespace::autoclean;
 
 has unit => (
     is => 'ro',
-    isa => MeasurementUnit,
+    isa => WeightMeasurementUnit,
     required => 1,
 );
 
@@ -82,7 +82,7 @@ Net::Async::Webservice::UPS::Rate - shipment rate from UPS
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 DESCRIPTION
 

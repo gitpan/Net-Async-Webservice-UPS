@@ -21,7 +21,6 @@ my %WriteMakefileArgs = (
   "NAME" => "Net::Async::Webservice::UPS",
   "PREREQ_PM" => {
     "Carp" => 0,
-    "Data::Printer" => 0,
     "Encode" => 0,
     "Error::TypeTiny" => 0,
     "File::Spec" => 0,
@@ -45,6 +44,7 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
+    "Data::Printer" => 0,
     "File::Temp" => 0,
     "HTTP::Response" => 0,
     "Sub::Override" => 0,
@@ -55,7 +55,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "1.0.4",
+  "VERSION" => "1.0.5",
   "test" => {
     "TESTS" => "t/*.t"
   }

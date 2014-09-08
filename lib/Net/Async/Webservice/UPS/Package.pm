@@ -1,13 +1,14 @@
 package Net::Async::Webservice::UPS::Package;
-$Net::Async::Webservice::UPS::Package::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Package::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Package::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
 use Type::Params qw(compile);
-use Types::Standard qw(Int Object);
+use Types::Standard qw(Str Object);
 use Net::Async::Webservice::UPS::Types ':types';
 use Net::Async::Webservice::UPS::Exception;
+use Carp;
 use namespace::autoclean;
 use 5.010;
 
@@ -21,11 +22,39 @@ has packaging_type => (
 );
 
 
-has measurement_system => (
+has linear_unit => (
     is => 'ro',
-    isa => MeasurementSystem,
+    isa => SizeMeasurementUnit,
     required => 1,
 );
+
+
+has weight_unit => (
+    is => 'ro',
+    isa => WeightMeasurementUnit,
+    required => 1,
+);
+
+
+around BUILDARGS => sub {
+    my ($orig,$self,@etc) = @_;
+
+    my $args = $self->$orig(@etc);
+    if (defined (my $ms = $args->{measurement_system})) {
+        if ($ms eq 'english') {
+            $args->{linear_unit} ||= 'IN';
+            $args->{weight_unit} ||= 'LBS';
+        }
+        elsif ($ms eq 'metric') {
+            $args->{linear_unit} ||= 'CM';
+            $args->{weight_unit} ||= 'KGS';
+        }
+        else {
+            croak qq{Bad value "$ms" for measurement_system};
+        }
+    };
+    return $args;
+};
 
 
 has length => (
@@ -54,7 +83,7 @@ has weight => (
 
 has id => (
     is => 'rw',
-    isa => Int,
+    isa => Str,
 );
 
 my %code_for_packaging_type = (
@@ -66,22 +95,6 @@ my %code_for_packaging_type = (
     UPS_25KG_BOX    => '24',
     UPS_10KG_BOX    => '25'
 );
-
-
-sub linear_unit {
-    state $argcheck = compile(Object);
-    my ($self) = $argcheck->(@_);
-
-    $self->measurement_system eq 'metric' ? 'CM' : 'IN';
-}
-
-
-sub weight_unit {
-    state $argcheck = compile(Object);
-    my ($self) = $argcheck->(@_);
-
-    $self->measurement_system eq 'metric' ? 'KGS' : 'LBS';
-}
 
 
 sub as_hash {
@@ -142,22 +155,36 @@ sub is_oversized {
     my $girth = ((2 * $sides[0]) + (2 * $sides[1]));
     my $size = $len + $girth;
 
-    my ($max_len,$max_weight,$max_size,
+    my ($max_len,$max_size,
         $min_size,
-        $os1_size,$os1_weight,
-        $os2_size,$os2_weight,
-        $os3_size,$os3_weight) =
-            $self->measurement_system eq 'english' ?
-                ( 108, 150, 165,
+        $os1_size,
+        $os2_size,
+        $os3_size,) =
+            $self->linear_unit eq 'IN' ?
+                ( 108, 165,
                   84,
-                  108, 30,
-                  130, 70,
-                  165, 90 ) :
-                ( 270, 70, 419,
+                  108,
+                  130,
+                  165, ) :
+                ( 270, 419,
                   210,
-                  270, 10,
-                  330, 32,
-                  419, 40 );
+                  270,
+                  330,
+                  419, );
+
+    my ($max_weight,
+        $os1_weight,
+        $os2_weight,
+        $os3_weight) =
+            $self->weight_unit eq 'LBS' ?
+                ( 150,
+                  30,
+                  70,
+                  90, ) :
+                ( 70,
+                  10,
+                  32,
+                  40, );
 
     if ($len > $max_len or $self->weight > $max_weight or $size > $max_size) {
         Net::Async::Webservice::UPS::Exception::BadPackage->throw({package=>$self});
@@ -181,7 +208,7 @@ sub cache_id {
     my ($self) = $argcheck->(@_);
 
     return join ':',
-        $self->packaging_type,$self->measurement_system,
+        $self->packaging_type,$self->linear_unit,$self->weight_unit,
         $self->length||0, $self->width||0, $self->height||0,
         $self->weight||0,;
 }
@@ -200,7 +227,7 @@ Net::Async::Webservice::UPS::Package - a package for UPS
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 ATTRIBUTES
 
@@ -210,44 +237,52 @@ Type of packaging (see
 L<Net::Async::Webservice::UPS::Types/PackagingType>), defaults to
 C<PACKAGE>.
 
-=head2 C<measurement_system>
+=head2 C<linear_unit>
 
-Either C<metric> (centimeters and kilograms) or C<english> (inches and
-pounds), required.
+Either C<CM> or C<IN>, required.
+
+You can either pass this attribute directly, or use the
+C<measurement_system> shortcut constructor parameter: if you pass C<<
+measurement_system => 'english' >>, C<linear_unit> will be assumed to
+be C<IN>; if you pass C<< measurement_system => 'metric' >>, it will
+be assumed to be C<CM>.
 
 =head2 C<length>
 
 Length of the package, in centimeters or inches depending on
-L</measurement_system>.
+L</linear_unit>.
 
 =head2 C<width>
 
 Width of the package, in centimeters or inches depending on
-L</measurement_system>.
+L</linear_unit>.
 
 =head2 C<height>
 
 Height of the package, in centimeters or inches depending on
-L</measurement_system>.
+L</linear_unit>.
 
 =head2 C<weight>
 
 Weight of the package, in kilograms or pounds depending on
-L</measurement_system>.
+L</weight_unit>.
 
 =head2 C<id>
 
-Integer, usually only used internally when requesting rates.
+Optional string, may be used to link package-level response parts to
+the packages in a request.
 
 =head1 METHODS
 
-=head2 C<linear_unit>
-
-Returns C<CM> or C<IN> depending on L</measurement_system>.
-
 =head2 C<weight_unit>
 
-Returns C<KGS> or C<LBS> depending on L</measurement_system>.
+Either C<KGS> or C<LBS>, required.
+
+You can either pass this attribute directly, or use the
+C<measurement_system> shortcut constructor parameter: if you pass C<<
+measurement_system => 'english' >>, C<weight_unit> will be assumed to
+be C<LBS>; if you pass C<< measurement_system => 'metric' >>, it will
+be assumed to be C<KGS>.
 
 =head2 C<as_hash>
 
@@ -265,6 +300,8 @@ Mostly used internally by L</as_hash>.
 =head2 C<cache_id>
 
 Returns a string identifying this package.
+
+=for Pod::Coverage BUILDARGS
 
 =head1 AUTHORS
 

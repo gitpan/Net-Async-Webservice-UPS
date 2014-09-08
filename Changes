@@ -1,3 +1,14 @@
+1.0.5     2014-09-08 16:09:04+01:00 Europe/London
+ - the ::Response::PackageResult objects in a
+   ::Response::ShipmentAccept now link back to the ::Package objects
+   they relate to
+ - ::Package now has separate linear_unit and weight_unit attributes;
+   measurement_system is now a shortcut in the constructor
+   parameters. Note that using kilograms/inches or pounds/centimetres
+   will currently result in an error message from UPS
+ - the 'id' attribute of ::Package is now a string; it's no longer
+   used internally, so it's now a generic user-side identifier
+
 1.0.4     2014-09-02 09:54:21+01:00 Europe/London
  - bump requirement of Types::Standard to get fix for RT #98362; it
    caused spurious parameter checking failures

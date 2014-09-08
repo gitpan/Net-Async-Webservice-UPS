@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Types::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -16,7 +16,7 @@ use Type::Library
                     ReturnServiceCode ReturnServiceLabel
                     CreditCardCode CreditCardType
                     PackagingType MeasurementSystem
-                    Measure MeasurementUnit Currency
+                    Measure SizeMeasurementUnit WeightMeasurementUnit Currency
                     Tolerance Payment ImageType Image
                     Contact Shipper CreditCard Label
                     ShipmentConfirm PackageResult
@@ -146,12 +146,17 @@ enum MeasurementSystem,
    )];
 
 
-enum MeasurementUnit,
+enum SizeMeasurementUnit,
+    [qw(
+           IN
+           CM
+   )];
+
+
+enum WeightMeasurementUnit,
     [qw(
            LBS
            KGS
-           IN
-           CM
    )];
 
 
@@ -300,7 +305,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 DESCRIPTION
 
@@ -355,9 +360,13 @@ C<Bravo> C<Diners>.
 
 Enum, one of C<metric> C<english>.
 
-=head2 C<MeasurementUnit>
+=head2 C<SizeMeasurementUnit>
 
-Enum, one of C<LBS> C<KGS> C<IN> C<CM>
+Enum, one of C<IN> C<CM>
+
+=head2 C<WeightMeasurementUnit>
+
+Enum, one of C<LBS> C<KGS>
 
 =head2 C<Currency>
 

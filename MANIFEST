@@ -29,6 +29,7 @@ lib/Net/Async/Webservice/UPS/Shipper.pm
 lib/Net/Async/Webservice/UPS/Types.pm
 t/Package.t
 t/address.t
+t/author-no-tabs.t
 t/data/address
 t/data/address-bad
 t/data/address-fail
@@ -50,7 +51,6 @@ t/net-async-webservice-ups-live-sync.t
 t/net-async-webservice-ups-live.t
 t/net-async-webservice-ups-offline.t
 t/rate.t
-t/release-no-tabs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 weaver.ini

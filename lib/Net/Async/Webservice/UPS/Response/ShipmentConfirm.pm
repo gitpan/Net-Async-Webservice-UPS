@@ -1,10 +1,10 @@
 package Net::Async::Webservice::UPS::Response::ShipmentConfirm;
-$Net::Async::Webservice::UPS::Response::ShipmentConfirm::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Response::ShipmentConfirm::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentConfirm::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
-use Types::Standard qw(Str);
+use Types::Standard qw(Str ArrayRef);
 use Net::Async::Webservice::UPS::Types qw(:types);
 use namespace::autoclean;
 
@@ -16,6 +16,13 @@ extends 'Net::Async::Webservice::UPS::Response::ShipmentBase';
 has shipment_digest => (
     is => 'ro',
     isa => Str,
+    required => 1,
+);
+
+
+has packages => (
+    is => 'ro',
+    isa => ArrayRef[Package],
     required => 1,
 );
 
@@ -33,7 +40,7 @@ Net::Async::Webservice::UPS::Response::ShipmentConfirm - UPS response to a ShipC
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 DESCRIPTION
 
@@ -46,6 +53,11 @@ L<Net::Async::Webservice::UPS::Response::ShipmentBase>.
 =head2 C<shipment_digest>
 
 A string with encoded information needed by UPS in the ShipAccept call.
+
+=head2 C<packages>
+
+For internal use: the list of packages passed into the
+L<Net::Async::Webservice::UPS/ship_confirm> call.
 
 =head1 AUTHORS
 

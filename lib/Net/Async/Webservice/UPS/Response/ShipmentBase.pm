@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::ShipmentBase;
-$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentBase::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -13,7 +13,7 @@ use namespace::autoclean;
 
 has unit => (
     is => 'ro',
-    isa => MeasurementUnit,
+    isa => WeightMeasurementUnit,
     required => 1,
 );
 
@@ -73,14 +73,14 @@ Net::Async::Webservice::UPS::Response::ShipmentBase - base class for UPS shipmen
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 ATTRIBUTES
 
 =head2 C<unit>
 
-Either C<metric> (centimeters and kilograms) or C<english> (inches and
-pounds), required.
+Either C<KGS> or C<LBS>, unit of measurement for the
+L</billing_weight>. Required.
 
 =head2 C<billing_weight>
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -209,8 +209,6 @@ sub request_rate {
     unless (scalar(@$packages)) {
         Error::TypeTiny::croak("request_rate() was given an empty list of packages");
     }
-
-    { my $pack_id=0; $_->id(++$pack_id) for @$packages }
 
     my $cache_key;
     if ($self->does_caching) {
@@ -557,6 +555,7 @@ sub ship_confirm {
                 total_charges => $charges->{TotalCharges}{MonetaryValue},
                 shipment_digest => $response->{ShipmentDigest},
                 shipment_identification_number => $response->{ShipmentIdentificationNumber},
+                packages => $packages,
             });
         },
     );
@@ -595,13 +594,14 @@ sub ship_accept {
         },
     );
 
+    my $packages = $args->{confirm}->packages;
+
     $self->xml_request({
         data => \%data,
         url_suffix => '/ShipAccept',
     })->transform(
         done => sub {
             my ($response) = @_;
-            use Data::Printer;
 
             my $results = $response->{ShipmentResults};
 
@@ -618,10 +618,11 @@ sub ship_accept {
                 shipment_identification_number => $results->{ShipmentIdentificationNumber},
                 _pair_if( pickup_request_number => $results->{PickupRequestNumber} ),
                 _img_if( control_log => $results->{ControlLogReceipt} ),
-                package_results => [ map {
-                    my $pr = $_;
+                package_results => [ pairwise {
+                    my ($pr,$pack) = ($a, $b);
 
                     Net::Async::Webservice::UPS::Response::PackageResult->new({
+                        package => $pack,
                         tracking_number => $pr->{TrackingNumber},
                         currency => $pr->{ServiceOptionsCharges}{CurrencyCode},
                         service_option_charges => $pr->{ServiceOptionsCharges}{MonetaryValue},
@@ -639,7 +640,7 @@ sub ship_accept {
                         _pair_if( form_group_id => $pr->{FormGroupId} ),
                         _img_if( cod_turn_in => $pr->{CODTurnInPage} ),
                     });
-                } @{$results->{PackageResults}//[]} ],
+                } @{$results->{PackageResults}//[]},@$packages ],
             });
         },
     );
@@ -754,7 +755,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 SYNOPSIS
 
@@ -973,8 +974,8 @@ be coerced to addresses.
 C<packages> is an arrayref of L<Net::Async::Webservice::UPS::Package>
 (or a single package, will be coerced to a 1-element array ref).
 
-I<NOTE>: the C<id> field of the packages you pass in will be modified,
-and set to their position in the array.
+I<NOTE>: the C<id> field of the packages I<used to be modified>. It no
+longer is.
 
 Optional parameters:
 

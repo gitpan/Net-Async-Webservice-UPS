@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::PackageResult;
-$Net::Async::Webservice::UPS::Response::PackageResult::VERSION = '1.0.4';
+$Net::Async::Webservice::UPS::Response::PackageResult::VERSION = '1.0.5';
 {
   $Net::Async::Webservice::UPS::Response::PackageResult::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -94,6 +94,13 @@ has cod_turn_in => (
     required => 0,
 );
 
+
+has package => (
+    is => 'ro',
+    isa => Package,
+    required => 1,
+);
+
 1;
 
 __END__
@@ -108,7 +115,7 @@ Net::Async::Webservice::UPS::Response::PackageResult - information about a packa
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 DESCRIPTION
 
@@ -170,6 +177,12 @@ String, not sure what this is for.
 
 An instance of L<Net::Async::Webservice::UPS::Response::Image>, not
 sure what this is for.
+
+=head2 C<package>
+
+Reference to the package given to the
+L<Net::Async::Webservice::UPS/ship_confirm> request, to which this
+result element refers to.
 
 =head1 AUTHORS
 
