@@ -21,6 +21,8 @@ $u->prepare_test_from_file('t/data/address-street-level-bad');
 $u->prepare_test_from_file('t/data/address-non-ascii');
 $u->prepare_test_from_file('t/data/ship-confirm-1');
 $u->prepare_test_from_file('t/data/ship-accept-1');
+$u->prepare_test_from_file('t/data/ship-confirm-2');
+$u->prepare_test_from_file('t/data/ship-accept-2');
 
 Test::Net::Async::Webservice::UPS::test_it($ups);
 

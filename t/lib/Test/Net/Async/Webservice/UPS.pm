@@ -520,6 +520,61 @@ sub test_it {
             'shipment accept worked',
         );
     };
+
+    subtest 'book shipment, 1 package' => sub {
+        my $confirm = $ups->ship_confirm({
+            from => $shipper,
+            to => $destination,
+            shipper => $shipper,
+            packages => $packages[0],
+            description => 'Testing 1 package',
+            payment => $bill_shipper,
+            label => 'EPL',
+        })->get;
+        cmp_deeply(
+            $confirm,
+            methods(
+                billing_weight => num(1),
+                unit => 'LBS',
+                currency => 'USD',
+            ),
+            'shipment confirm worked',
+        );
+        cmp_deeply(
+            $confirm->transportation_charges + $confirm->service_option_charges,
+            num($confirm->total_charges,0.01),
+            'charges add up',
+        );
+        ok($confirm->shipment_digest,'we have a digest');
+        ok($confirm->shipment_identification_number,'we have an id number');
+
+        my $accept = $ups->ship_accept({
+            confirm => $confirm,
+        })->get;
+
+        cmp_deeply(
+            $accept,
+            methods(
+                billing_weight => num(1),
+                unit => 'LBS',
+                currency => 'USD',
+                service_option_charges => num($confirm->service_option_charges),
+                transportation_charges => num($confirm->transportation_charges),
+                total_charges => num($confirm->total_charges),
+                shipment_identification_number => $confirm->shipment_identification_number,
+                package_results => [
+                    all(
+                        isa('Net::Async::Webservice::UPS::Response::PackageResult'),
+                        methods(
+                            label => isa('Net::Async::Webservice::UPS::Response::Image'),
+                            package => $packages[0],
+                        ),
+                    )
+                ],
+            ),
+            'shipment accept worked',
+        );
+    };
 }
 
 1;

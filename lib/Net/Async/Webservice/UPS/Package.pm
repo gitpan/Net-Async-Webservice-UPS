@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Package;
-$Net::Async::Webservice::UPS::Package::VERSION = '1.0.5';
+$Net::Async::Webservice::UPS::Package::VERSION = '1.0.6';
 {
   $Net::Async::Webservice::UPS::Package::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -227,7 +227,7 @@ Net::Async::Webservice::UPS::Package - a package for UPS
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 ATTRIBUTES
 

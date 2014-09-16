@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS;
-$Net::Async::Webservice::UPS::VERSION = '1.0.5';
+$Net::Async::Webservice::UPS::VERSION = '1.0.6';
 {
   $Net::Async::Webservice::UPS::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -420,7 +420,7 @@ sub validate_street_address {
         data => \%data,
         url_suffix => '/XAV',
         XMLin => {
-            ForceArray => [ 'AddressValidationResponse','AddressLine' ],
+            ForceArray => [ 'AddressValidationResponse','AddressLine', 'AddressKeyFormat' ],
         },
     })->then(
         sub {
@@ -449,9 +449,8 @@ sub validate_street_address {
                 $quality = 1;
             }
 
-            my @addresses;my $aks = $response->{AddressKeyFormat};
-            if (ref($aks) ne 'ARRAY') { $aks = [ $aks ] };
-            for my $ak (@$aks) {
+            my @addresses;
+            for my $ak (@{$response->{AddressKeyFormat}}) {
                 push @addresses, Net::Async::Webservice::UPS::Address->new({
                     quality => $quality,
                     building_name => $ak->{BuildingName},
@@ -599,6 +598,9 @@ sub ship_accept {
     $self->xml_request({
         data => \%data,
         url_suffix => '/ShipAccept',
+        XMLin => {
+            ForceArray => [ 'PackageResults' ],
+        },
     })->transform(
         done => sub {
             my ($response) = @_;
@@ -755,7 +757,7 @@ Net::Async::Webservice::UPS - UPS API client, non-blocking
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 SYNOPSIS
 
