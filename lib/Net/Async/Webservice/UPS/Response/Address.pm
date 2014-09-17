@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Address;
-$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::Response::Address::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,6 +7,8 @@ use Moo;
 use Types::Standard qw(ArrayRef HashRef);
 use Net::Async::Webservice::UPS::Types qw(:types);
 use namespace::autoclean;
+
+extends 'Net::Async::Webservice::UPS::Response';
 
 # ABSTRACT: response for validate_address
 
@@ -38,7 +40,7 @@ Net::Async::Webservice::UPS::Response::Address - response for validate_address
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 DESCRIPTION
 

@@ -80,6 +80,7 @@ sub test_it {
             length=>34, width=>24, height=>1.5,
             weight=>1,
             measurement_system => 'english',
+            description => 'some stuff',
         ),
         Net::Async::Webservice::UPS::Package->new(
             length=>34, width=>24, height=>1.5,
@@ -142,6 +143,7 @@ sub test_it {
     my $rate1;
     subtest 'rating a package via postcodes' => sub {
         $rate1 = $ups->request_rate({
+            customer_context => 'test 1',
             from => $postal_codes[0],
             to => $postal_codes[1],
             packages => $packages[0],
@@ -157,10 +159,13 @@ sub test_it {
             [package_comparator($packages[0])],
             'service refers to the right package'
         );
+        cmp_deeply($rate1->customer_context,'test 1','context passed ok');
     };
 
     subtest 'rating a package via addresss' => sub {
         my $rate2 = $ups->request_rate({
+            # need this, otherwise the result is different from $rate1
+            customer_context => 'test 1',
             from => $addresses[0],
             to => $addresses[1],
             packages => $packages[0],
@@ -468,6 +473,7 @@ sub test_it {
 
     subtest 'book shipment' => sub {
         my $confirm = $ups->ship_confirm({
+            customer_context => 'test ship1',
             from => $shipper,
             to => $destination,
             shipper => $shipper,
@@ -482,6 +488,7 @@ sub test_it {
                 billing_weight => num(3),
                 unit => 'LBS',
                 currency => 'USD',
+                customer_context => 'test ship1',
             ),
             'shipment confirm worked',
         );
@@ -494,12 +501,14 @@ sub test_it {
         ok($confirm->shipment_identification_number,'we have an id number');
 
         my $accept = $ups->ship_accept({
+            customer_context => 'test acc1',
             confirm => $confirm,
         })->get;
 
         cmp_deeply(
             $accept,
             methods(
+                customer_context => 'test acc1',
                 billing_weight => num(3),
                 unit => 'LBS',
                 currency => 'USD',
@@ -529,6 +538,62 @@ sub test_it {
             packages => $packages[0],
             description => 'Testing 1 package',
             payment => $bill_shipper,
+            label => 'EPL',
+        })->get;
+        cmp_deeply(
+            $confirm,
+            methods(
+                billing_weight => num(1),
+                unit => 'LBS',
+                currency => 'USD',
+            ),
+            'shipment confirm worked',
+        );
+        cmp_deeply(
+            $confirm->transportation_charges + $confirm->service_option_charges,
+            num($confirm->total_charges,0.01),
+            'charges add up',
+        );
+        ok($confirm->shipment_digest,'we have a digest');
+        ok($confirm->shipment_identification_number,'we have an id number');
+
+        my $accept = $ups->ship_accept({
+            confirm => $confirm,
+        })->get;
+
+        cmp_deeply(
+            $accept,
+            methods(
+                billing_weight => num(1),
+                unit => 'LBS',
+                currency => 'USD',
+                service_option_charges => num($confirm->service_option_charges),
+                transportation_charges => num($confirm->transportation_charges),
+                total_charges => num($confirm->total_charges),
+                shipment_identification_number => $confirm->shipment_identification_number,
+                package_results => [
+                    all(
+                        isa('Net::Async::Webservice::UPS::Response::PackageResult'),
+                        methods(
+                            label => isa('Net::Async::Webservice::UPS::Response::Image'),
+                            package => $packages[0],
+                        ),
+                    )
+                ],
+            ),
+            'shipment accept worked',
+        );
+    };
+
+    subtest 'book return shipment, 1 package' => sub {
+        my $confirm = $ups->ship_confirm({
+            from => $destination,
+            to => $shipper,
+            shipper => $shipper,
+            packages => $packages[0],
+            description => 'Testing 1 package return',
+            payment => $bill_shipper,
+            return_service => 'PRL',
             label => 'EPL',
         })->get;
         cmp_deeply(

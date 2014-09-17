@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Service;
-$Net::Async::Webservice::UPS::Service::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::Service::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::Service::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -83,9 +83,17 @@ around BUILDARGS => sub {
     my $args = $class->$orig(@etc);
     if ($args->{code} and not $args->{label}) {
         $args->{label} = $label_for_code{$args->{code}};
+        if (!defined $args->{label}) {
+            require Carp;
+            Carp::croak "Bad service code $args->{code}";
+        }
     }
     elsif ($args->{label} and not $args->{code}) {
         $args->{code} = $code_for_label{$args->{label}};
+        if (!defined $args->{code}) {
+            require Carp;
+            Carp::croak "Bad service label $args->{label}";
+        }
     }
     return $args;
 };
@@ -116,7 +124,7 @@ Net::Async::Webservice::UPS::Service - shipment service from UPS
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 DESCRIPTION
 

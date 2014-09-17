@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::ShipmentConfirm;
-$Net::Async::Webservice::UPS::Response::ShipmentConfirm::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::Response::ShipmentConfirm::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentConfirm::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -40,7 +40,7 @@ Net::Async::Webservice::UPS::Response::ShipmentConfirm - UPS response to a ShipC
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 DESCRIPTION
 

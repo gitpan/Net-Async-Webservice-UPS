@@ -57,4 +57,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 1.0.6
+version: 1.0.7

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::ShipmentBase;
-$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::Response::ShipmentBase::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentBase::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -7,6 +7,8 @@ use Moo;
 use Types::Standard qw(Str);
 use Net::Async::Webservice::UPS::Types qw(:types);
 use namespace::autoclean;
+
+extends 'Net::Async::Webservice::UPS::Response';
 
 # ABSTRACT: base class for UPS shipment responses
 
@@ -73,7 +75,7 @@ Net::Async::Webservice::UPS::Response::ShipmentBase - base class for UPS shipmen
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 ATTRIBUTES
 

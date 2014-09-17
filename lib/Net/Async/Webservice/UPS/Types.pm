@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Types;
-$Net::Async::Webservice::UPS::Types::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::Types::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::Types::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -215,7 +215,7 @@ class_type Payment, { class => 'Net::Async::Webservice::UPS::Payment' };
 class_type CreditCard, { class => 'Net::Async::Webservice::UPS::CreditCard' };
 
 
-enum ImageType, [qw(EPL ZPL SPL STARPL GIF)];
+enum ImageType, [qw(EPL ZPL SPL STARPL GIF HTML)];
 
 
 class_type Image, { class => 'Net::Async::Webservice::UPS::Response::Image' };
@@ -305,7 +305,7 @@ Net::Async::Webservice::UPS::Types - type library for UPS
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 DESCRIPTION
 
@@ -403,7 +403,7 @@ Instance of L<Net::Async::Webservice::UPS::CreditCard>.
 
 =head2 C<ImageType>
 
-Enum, one of C<EPL>, C<ZPL>, C<SPL>, C<STARPL>, C<GIF>.
+Enum, one of C<EPL>, C<ZPL>, C<SPL>, C<STARPL>, C<GIF>, C<HTML>.
 
 =head2 C<Image>
 

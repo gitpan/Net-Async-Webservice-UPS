@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::CreditCard;
-$Net::Async::Webservice::UPS::CreditCard::VERSION = '1.0.6';
+$Net::Async::Webservice::UPS::CreditCard::VERSION = '1.0.7';
 {
   $Net::Async::Webservice::UPS::CreditCard::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -83,9 +83,17 @@ around BUILDARGS => sub {
     my $args = $class->$orig(@etc);
     if ($args->{code} and not $args->{type}) {
         $args->{type} = $type_for_code{$args->{code}};
+        if (!defined $args->{type}) {
+            require Carp;
+            Carp::croak "Bad credit card code $args->{code}";
+        }
     }
     elsif ($args->{type} and not $args->{code}) {
         $args->{code} = $code_for_type{$args->{type}};
+        if (!defined $args->{code}) {
+            require Carp;
+            Carp::croak "Bad credit card type $args->{type}";
+        }
     }
     return $args;
 };
@@ -120,7 +128,7 @@ Net::Async::Webservice::UPS::CreditCard - a credit card to pay UPS shipments wit
 
 =head1 VERSION
 
-version 1.0.6
+version 1.0.7
 
 =head1 ATTRIBUTES
 
