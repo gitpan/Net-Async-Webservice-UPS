@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Address;
-$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Response::Address::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -19,12 +19,18 @@ has addresses => (
     required => 1,
 );
 
+sub BUILDARGS {
+    my ($class,$hashref) = @_;
+    if (@_>2) { shift; $hashref={@_} };
 
-has warnings => (
-    is => 'ro',
-    isa => HashRef,
-    required => 0,
-);
+    my $ret = $class->next::method($hashref);
+
+    if ($hashref->{addresses} and not $ret->{addresses}) {
+        $ret->{addresses} = $hashref->{addresses};
+    }
+
+    return $ret;
+}
 
 1;
 
@@ -40,7 +46,7 @@ Net::Async::Webservice::UPS::Response::Address - response for validate_address
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 DESCRIPTION
 
@@ -53,10 +59,6 @@ L<Net::Async::Webservice::UPS/validate_address>.
 
 Array ref of addresses that correspond to the one passed in to
 C<validate_address>. Each one will have its own C<quality> rating.
-
-=head2 C<warnings>
-
-Hashref of warnings extracted from the UPS response.
 
 =head1 AUTHORS
 

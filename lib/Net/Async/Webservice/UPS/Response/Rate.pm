@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Rate;
-$Net::Async::Webservice::UPS::Response::Rate::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Response::Rate::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Response::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -19,12 +19,18 @@ has services => (
     required => 1,
 );
 
+sub BUILDARGS {
+    my ($class,$hashref) = @_;
+    if (@_>2) { shift; $hashref={@_} };
 
-has warnings => (
-    is => 'ro',
-    isa => HashRef,
-    required => 0,
-);
+    my $ret = $class->next::method($hashref);
+
+    if ($hashref->{services} and not $ret->{services}) {
+        $ret->{services} = $hashref->{services};
+    }
+
+    return $ret;
+}
 
 1;
 
@@ -40,7 +46,7 @@ Net::Async::Webservice::UPS::Response::Rate - response for request_rate
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 DESCRIPTION
 
@@ -54,10 +60,6 @@ L<Net::Async::Webservice::UPS/request_rate>.
 Array ref of services that you can use to ship the packages passed in
 to C<request_rate>. Each one will have a set of rates, one per
 package.
-
-=head2 C<warnings>
-
-Hashref of warnings extracted from the UPS response.
 
 =head1 AUTHORS
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Image;
-$Net::Async::Webservice::UPS::Response::Image::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Response::Image::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Response::Image::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -38,15 +38,20 @@ around BUILDARGS => sub {
 };
 
 
-sub from_hash {
+sub BUILDARGS {
     my ($class,$hash) = @_;
 
     my ($format_key) = grep {/ImageFormat$/} keys %$hash;
 
-    return $class->new({
-        format => $hash->{$format_key}{Code},
-        base64_data => $hash->{GraphicImage},
-    });
+    if ($format_key) {
+        return {
+            format => $hash->{$format_key}{Code},
+            base64_data => $hash->{GraphicImage},
+        };
+    }
+    else {
+        return $hash;
+    }
 }
 
 1;
@@ -63,7 +68,7 @@ Net::Async::Webservice::UPS::Response::Image - an image in a UPS response
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 ATTRIBUTES
 
@@ -80,14 +85,14 @@ it decoded automatically.
 
 =head1 METHODS
 
-=head2 C<from_hash>
+=head2 C<BUILDARGS>
 
   my $miage = Net::Async::Webservice::UPS::Response::Image
-                ->from_hash($piece_of_ups_response);
+                ->new($piece_of_ups_response);
 
-Constructor, takes a hashref with at least a key matching
-C</ImageFormat$/> and a key of C<GraphicImage>, and extracts the
-image.
+If you call the constructor with a hashref with at least a key
+matching C</ImageFormat$/> and a key of C<GraphicImage>, this will
+extract the image.
 
 =for Pod::Coverage BUILDARGS
 

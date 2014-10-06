@@ -1,3 +1,7 @@
+1.1.0     2014-10-06 17:21:38+01:00 Europe/London
+ - add support for retrieving Quantum View events (the 'manifest' part
+   of the response is still not supported)
+
 1.0.7     2014-09-17 11:42:50+01:00 Europe/London
  - fix parsing receipt image for ship_accept calls on return shipments
  - packages now have a 'description' field, which is required for

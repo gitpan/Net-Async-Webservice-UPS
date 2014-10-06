@@ -64,7 +64,7 @@ sub do_request {
     }
 }
 
-sub prepare_test_from_file {
+sub file_for_next_test {
     my ($self,$file,$comment) = @_;
 
     my ($req_line,$request,$response) = do {

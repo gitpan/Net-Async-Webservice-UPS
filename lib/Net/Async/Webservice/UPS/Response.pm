@@ -1,10 +1,10 @@
 package Net::Async::Webservice::UPS::Response;
-$Net::Async::Webservice::UPS::Response::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Response::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Response::DIST = 'Net-Async-Webservice-UPS';
 }
 use Moo;
-use Types::Standard qw(Str);
+use Types::Standard qw(Str HashRef);
 use namespace::autoclean;
 
 # ABSTRACT: base class with fields common to all UPS responses
@@ -14,6 +14,28 @@ has customer_context => (
     is => 'ro',
     isa => Str,
 );
+
+
+has warnings => (
+    is => 'ro',
+    isa => HashRef,
+    required => 0,
+);
+
+sub BUILDARGS {
+    my ($class,@etc) = @_;
+
+    my $hashref = $class->next::method(@etc);
+    if ($hashref->{Response}) {
+        return {
+            customer_context => $hashref->{Response}{TransactionReference}{CustomerContext},
+            ( $hashref->{Response}{Error} ? (warnings => $hashref->{Response}{Error}) : () ),
+        }
+    }
+    else {
+        return $hashref;
+    }
+}
 
 1;
 
@@ -29,13 +51,19 @@ Net::Async::Webservice::UPS::Response - base class with fields common to all UPS
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 ATTRIBUTES
 
 =head2 C<customer_context>
 
 A string, usually whatever was passed to the request as C<customer_context>.
+
+=head2 C<warnings>
+
+Hashref of warnings extracted from the UPS response.
+
+=for Pod::Coverage BUILDARGS
 
 =head1 AUTHORS
 

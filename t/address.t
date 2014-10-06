@@ -83,5 +83,45 @@ cmp_deeply(\@calls,
             [ ignore(),re(qr{/AV$}),ignore() ]],
            'two calls to the service');
 
+subtest 'round-trip' => sub {
+    my $ad = Net::Async::Webservice::UPS::Address->new({
+        city => 'City',
+        postal_code => 1234,
+        postal_code_extended => 56,
+        state => 'State',
+        country_code => 'CC',
+        name => 'Me',
+        building_name => 'building',
+        address => 'row 1',
+        address2 => 'row 2',
+        address3 => 'row 3',
+        is_residential => 1,
+    });
+
+    subtest 'round-trip via AV' => sub {
+        my $ad2 = Net::Async::Webservice::UPS::Address->new($ad->as_hash());
+        for my $f (qw(country_code postal_code city state is_residential)) {
+            is($ad2->$f,$ad->$f,"$f matches");
+        }
+    };
+
+    subtest 'round-trip via XAV' => sub {
+        my $ad2 = Net::Async::Webservice::UPS::Address->new($ad->as_hash('XAV'));
+        for my $f (qw(country_code postal_code city state
+                      postal_code_extended address address2 address3
+                      name building_name)) {
+            is($ad2->$f,$ad->$f,"$f matches");
+        }
+    };
+
+    subtest 'round-trip via Ship' => sub {
+        my $ad2 = Net::Async::Webservice::UPS::Address->new($ad->as_hash('Ship'));
+        for my $f (qw(country_code postal_code city state
+                      address address2 address3)) {
+            is($ad2->$f,$ad->$f,"$f matches");
+        }
+    };
+};
+
 done_testing();
 

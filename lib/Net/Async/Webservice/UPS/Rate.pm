@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Rate;
-$Net::Async::Webservice::UPS::Rate::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Rate::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Rate::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -68,6 +68,27 @@ has to => (
     required => 1,
 );
 
+sub BUILDARGS {
+    my ($class,@etc) = @_;
+    my $hashref = $class->next::method(@etc);
+
+    if ($hashref->{BillingWeight}) {
+        return {
+            billing_weight  => $hashref->{BillingWeight}{Weight},
+            unit            => $hashref->{BillingWeight}{UnitOfMeasurement}{Code},
+            total_charges   => $hashref->{TotalCharges}{MonetaryValue},
+            total_charges_currency => $hashref->{TotalCharges}{CurrencyCode},
+            weight          => $hashref->{Weight},
+            rated_package   => $hashref->{rated_package},
+            from            => $hashref->{from},
+            to              => $hashref->{to},
+        }
+    }
+    else {
+        return $hashref,
+    }
+}
+
 1;
 
 __END__
@@ -82,7 +103,7 @@ Net::Async::Webservice::UPS::Rate - shipment rate from UPS
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 DESCRIPTION
 
@@ -126,6 +147,8 @@ Sender address for this shipment.
 =head2 C<to>
 
 Recipient address for this shipment.
+
+=for Pod::Coverage BUILDARGS
 
 =head1 AUTHORS
 

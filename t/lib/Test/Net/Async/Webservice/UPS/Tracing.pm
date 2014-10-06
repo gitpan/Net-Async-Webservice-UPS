@@ -17,13 +17,25 @@ sub _build_user_agent {
     return $ua;
 }
 
+has filename => (
+    is => 'ro',
+    writer => 'file_for_next_test',
+);
+
 around do_request => sub {
     my ($orig,$self,%args) = @_;
     my $request = $args{request};
 
     my ($sec,$usec) = gettimeofday;
 
-    my ($fh,$filename) = tempfile("net-ups-$sec-$usec-XXXX");
+    my ($fh,$filename);
+    if ($self->filename) {
+        open $fh, '>', $self->filename;
+        $self->filename(undef);
+    }
+    else {
+        ($fh,$filename) = tempfile("net-ups-$sec-$usec-XXXX");
+    }
 
     printf $fh "POST %s\n\n%s\n",
         $request->uri,

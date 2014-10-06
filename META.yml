@@ -33,6 +33,7 @@ recommends:
   Net::Async::HTTP: '0'
 requires:
   Carp: '0'
+  DateTime::Format::Strptime: '0'
   Encode: '0'
   Error::TypeTiny: '0'
   File::Spec: '0'
@@ -40,14 +41,19 @@ requires:
   HTTP::Request: '0'
   List::AllUtils: '0'
   MIME::Base64: '0'
+  Module::Runtime: '0'
   Moo: '0'
+  NAP::policy: '0'
   Net::Async::Webservice::Common: '0'
   Scalar::Util: '0'
+  Scope::Upper: '0'
+  Sub::Exporter: '0'
   Task::Weaken: '0'
   Try::Tiny: '0'
   Type::Library: '0'
   Type::Params: '0'
   Type::Utils: '0'
+  Types::DateTime: '0'
   Types::Standard: '1.000003'
   Types::URI: '0'
   XML::Simple: '0'
@@ -57,4 +63,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/NET-A-PORTER/Net-UPS.git
-version: 1.0.7
+version: 1.1.0

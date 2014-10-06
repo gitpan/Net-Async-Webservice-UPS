@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Shipper;
-$Net::Async::Webservice::UPS::Shipper::VERSION = '1.0.7';
+$Net::Async::Webservice::UPS::Shipper::VERSION = '1.1.0';
 {
   $Net::Async::Webservice::UPS::Shipper::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -34,7 +34,7 @@ sub cache_id {
     my ($self) = @_;
 
     return join ':',
-        $self->account_number,
+        ($self->account_number||''),
         $self->address->cache_id;
 }
 
@@ -52,7 +52,7 @@ Net::Async::Webservice::UPS::Shipper - a contact with an account number
 
 =head1 VERSION
 
-version 1.0.7
+version 1.1.0
 
 =head1 DESCRIPTION
 

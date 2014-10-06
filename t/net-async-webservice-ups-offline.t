@@ -9,23 +9,6 @@ use Test::Net::Async::Webservice::UPS::Factory;
 
 my ($ups,$u) = Test::Net::Async::Webservice::UPS::Factory::without_network;
 
-$u->prepare_test_from_file('t/data/rate-1-package');
-$u->prepare_test_from_file('t/data/rate-1-package');
-$u->prepare_test_from_file('t/data/rate-2-packages');
-$u->prepare_test_from_file('t/data/shop-1-package');
-$u->prepare_test_from_file('t/data/shop-2-packages');
-$u->prepare_test_from_file('t/data/address');
-$u->prepare_test_from_file('t/data/address-bad');
-$u->prepare_test_from_file('t/data/address-street-level');
-$u->prepare_test_from_file('t/data/address-street-level-bad');
-$u->prepare_test_from_file('t/data/address-non-ascii');
-$u->prepare_test_from_file('t/data/ship-confirm-1');
-$u->prepare_test_from_file('t/data/ship-accept-1');
-$u->prepare_test_from_file('t/data/ship-confirm-2');
-$u->prepare_test_from_file('t/data/ship-accept-2');
-$u->prepare_test_from_file('t/data/ship-confirm-3');
-$u->prepare_test_from_file('t/data/ship-accept-3');
-
 Test::Net::Async::Webservice::UPS::test_it($ups);
 
 subtest 'HTTP failure' => sub {
@@ -54,7 +37,7 @@ subtest 'HTTP failure' => sub {
 };
 
 subtest 'UPS failure' => sub {
-    $u->prepare_test_from_file('t/data/address-fail');
+    $u->file_for_next_test('t/data/address-fail');
 
     my $f = $ups->validate_address(
         Net::Async::Webservice::UPS::Address->new({
