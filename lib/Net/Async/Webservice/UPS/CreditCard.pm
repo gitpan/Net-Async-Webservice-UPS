@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::CreditCard;
-$Net::Async::Webservice::UPS::CreditCard::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::CreditCard::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::CreditCard::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -128,7 +128,7 @@ Net::Async::Webservice::UPS::CreditCard - a credit card to pay UPS shipments wit
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 ATTRIBUTES
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Utils;
-$Net::Async::Webservice::UPS::Response::Utils::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::Utils::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::Utils::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -113,7 +113,7 @@ Net::Async::Webservice::UPS::Response::Utils - utility functions to parse hashre
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

@@ -21,6 +21,7 @@ my %WriteMakefileArgs = (
   "NAME" => "Net::Async::Webservice::UPS",
   "PREREQ_PM" => {
     "Carp" => 0,
+    "DateTime::Format::ISO8601" => 0,
     "DateTime::Format::Strptime" => 0,
     "Encode" => 0,
     "Error::TypeTiny" => 0,
@@ -61,7 +62,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "1.1.0",
+  "VERSION" => "1.1.1",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -71,6 +72,7 @@ my %WriteMakefileArgs = (
 my %FallbackPrereqs = (
   "Carp" => 0,
   "Data::Printer" => 0,
+  "DateTime::Format::ISO8601" => 0,
   "DateTime::Format::Strptime" => 0,
   "Encode" => 0,
   "Error::TypeTiny" => 0,

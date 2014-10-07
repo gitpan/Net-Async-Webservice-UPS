@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::File;
-$Net::Async::Webservice::UPS::Response::QV::File::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::QV::File::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::QV::File::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -95,7 +95,7 @@ Net::Async::Webservice::UPS::Response::QV::File - a Quantum View "file"
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

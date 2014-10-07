@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::Generic;
-$Net::Async::Webservice::UPS::Response::QV::Generic::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::QV::Generic::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::QV::Generic::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -152,7 +152,7 @@ Net::Async::Webservice::UPS::Response::QV::Generic - a Quantum View "generic" ev
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

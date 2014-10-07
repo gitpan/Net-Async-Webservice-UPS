@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response;
-$Net::Async::Webservice::UPS::Response::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -51,7 +51,7 @@ Net::Async::Webservice::UPS::Response - base class with fields common to all UPS
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 ATTRIBUTES
 

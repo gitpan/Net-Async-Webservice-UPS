@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::Package;
-$Net::Async::Webservice::UPS::Response::QV::Package::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::QV::Package::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::QV::Package::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -99,7 +99,7 @@ Net::Async::Webservice::UPS::Response::QV::Package - a package inside a Quantum 
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

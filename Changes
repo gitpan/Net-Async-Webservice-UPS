@@ -1,3 +1,6 @@
+1.1.1     2014-10-07 10:34:29+01:00 Europe/London
+ - add DateTime::Format::ISO8601 prereq that was not auto-detected
+
 1.1.0     2014-10-06 17:21:38+01:00 Europe/London
  - add support for retrieving Quantum View events (the 'manifest' part
    of the response is still not supported)

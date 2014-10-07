@@ -43,6 +43,7 @@
          },
          "requires" : {
             "Carp" : "0",
+            "DateTime::Format::ISO8601" : "0",
             "DateTime::Format::Strptime" : "0",
             "Encode" : "0",
             "Error::TypeTiny" : "0",
@@ -102,6 +103,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS"
       }
    },
-   "version" : "1.1.0"
+   "version" : "1.1.1"
 }
 

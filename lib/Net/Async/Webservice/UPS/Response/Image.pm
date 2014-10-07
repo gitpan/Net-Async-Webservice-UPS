@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Image;
-$Net::Async::Webservice::UPS::Response::Image::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::Image::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::Image::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -68,7 +68,7 @@ Net::Async::Webservice::UPS::Response::Image - an image in a UPS response
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 ATTRIBUTES
 

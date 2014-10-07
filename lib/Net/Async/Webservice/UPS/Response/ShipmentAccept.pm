@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::ShipmentAccept;
-$Net::Async::Webservice::UPS::Response::ShipmentAccept::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::ShipmentAccept::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::ShipmentAccept::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -87,7 +87,7 @@ Net::Async::Webservice::UPS::Response::ShipmentAccept - UPS response to a ShipAc
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

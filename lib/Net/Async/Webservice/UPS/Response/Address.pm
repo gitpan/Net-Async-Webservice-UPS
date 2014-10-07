@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::Address;
-$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::Address::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::Address::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -46,7 +46,7 @@ Net::Async::Webservice::UPS::Response::Address - response for validate_address
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::QVSubscription;
-$Net::Async::Webservice::UPS::QVSubscription::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::QVSubscription::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::QVSubscription::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -77,7 +77,7 @@ Net::Async::Webservice::UPS::QVSubscription - a UPS Quantum View subscription
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

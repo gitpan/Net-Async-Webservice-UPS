@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV;
-$Net::Async::Webservice::UPS::Response::QV::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::QV::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::QV::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -66,7 +66,7 @@ Net::Async::Webservice::UPS::Response::QV - response for qv_events
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 

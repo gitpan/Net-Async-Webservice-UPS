@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::Origin;
-$Net::Async::Webservice::UPS::Response::QV::Origin::VERSION = '1.1.0';
+$Net::Async::Webservice::UPS::Response::QV::Origin::VERSION = '1.1.1';
 {
   $Net::Async::Webservice::UPS::Response::QV::Origin::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -108,7 +108,7 @@ Net::Async::Webservice::UPS::Response::QV::Origin - a Quantum View "origin" even
 
 =head1 VERSION
 
-version 1.1.0
+version 1.1.1
 
 =head1 DESCRIPTION
 
