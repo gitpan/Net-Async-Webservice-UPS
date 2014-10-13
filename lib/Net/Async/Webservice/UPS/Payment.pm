@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Payment;
-$Net::Async::Webservice::UPS::Payment::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Payment::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Payment::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -107,7 +107,7 @@ Net::Async::Webservice::UPS::Payment - a payment method for UPS shipments
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 ATTRIBUTES
 

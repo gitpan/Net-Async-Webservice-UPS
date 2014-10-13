@@ -32,7 +32,6 @@ my %WriteMakefileArgs = (
     "MIME::Base64" => 0,
     "Module::Runtime" => 0,
     "Moo" => 0,
-    "NAP::policy" => 0,
     "Net::Async::Webservice::Common" => 0,
     "Scalar::Util" => 0,
     "Scope::Upper" => 0,
@@ -62,7 +61,7 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0,
     "lib" => 0
   },
-  "VERSION" => "1.1.1",
+  "VERSION" => "1.1.2",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -85,7 +84,6 @@ my %FallbackPrereqs = (
   "MIME::Base64" => 0,
   "Module::Runtime" => 0,
   "Moo" => 0,
-  "NAP::policy" => 0,
   "Net::Async::Webservice::Common" => 0,
   "Scalar::Util" => 0,
   "Scope::Upper" => 0,

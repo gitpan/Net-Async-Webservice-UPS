@@ -1,9 +1,11 @@
 package Net::Async::Webservice::UPS::Response::Utils;
-$Net::Async::Webservice::UPS::Response::Utils::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Response::Utils::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Response::Utils::DIST = 'Net-Async-Webservice-UPS';
 }
-use NAP::policy 'exporter';
+use strict;
+use warnings;
+use 5.010;
 use Sub::Exporter -setup => {
     exports => [qw(img_if pair_if base64_if
                    in_if out_if in_object_if in_object_array_if in_datetime_if
@@ -68,16 +70,16 @@ sub in_object_array_if {
 }
 
 
-sub in_datetime_if {
-    my ($attr,$key) = @_;
-    state $date_parser = DateTime::Format::Strptime->new(
-        pattern => '%Y%m%d%H%M%S',
-    );
-    if ($implied_arg->{$key} && $implied_arg->{$key}{Date}) {
-        return ( $attr => $date_parser->parse_datetime($implied_arg->{$key}{Date}.$implied_arg->{$key}{Time}) );
-    }
-    return;
-}
+{my $date_parser = DateTime::Format::Strptime->new(
+    pattern => '%Y%m%d%H%M%S',
+);
+ sub in_datetime_if {
+     my ($attr,$key) = @_;
+     if ($implied_arg->{$key} && $implied_arg->{$key}{Date}) {
+         return ( $attr => $date_parser->parse_datetime($implied_arg->{$key}{Date}.$implied_arg->{$key}{Time}) );
+     }
+     return;
+}}
 
 
 sub pair_if {
@@ -113,7 +115,7 @@ Net::Async::Webservice::UPS::Response::Utils - utility functions to parse hashre
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 DESCRIPTION
 

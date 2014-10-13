@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Shipper;
-$Net::Async::Webservice::UPS::Shipper::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Shipper::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Shipper::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -52,7 +52,7 @@ Net::Async::Webservice::UPS::Shipper - a contact with an account number
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 DESCRIPTION
 

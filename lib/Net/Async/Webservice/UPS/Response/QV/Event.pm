@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::Event;
-$Net::Async::Webservice::UPS::Response::QV::Event::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Response::QV::Event::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Response::QV::Event::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -92,7 +92,7 @@ Net::Async::Webservice::UPS::Response::QV::Event - a Quantum View "event"
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 DESCRIPTION
 

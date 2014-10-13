@@ -54,7 +54,6 @@
             "MIME::Base64" : "0",
             "Module::Runtime" : "0",
             "Moo" : "0",
-            "NAP::policy" : "0",
             "Net::Async::Webservice::Common" : "0",
             "Scalar::Util" : "0",
             "Scope::Upper" : "0",
@@ -103,6 +102,6 @@
          "web" : "https://github.com/NET-A-PORTER/Net-UPS"
       }
    },
-   "version" : "1.1.1"
+   "version" : "1.1.2"
 }
 

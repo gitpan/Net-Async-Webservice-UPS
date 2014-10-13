@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Label;
-$Net::Async::Webservice::UPS::Label::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Label::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Label::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -51,7 +51,7 @@ Net::Async::Webservice::UPS::Label - a label for a shipment request
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 DESCRIPTION
 

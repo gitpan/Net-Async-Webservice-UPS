@@ -1,5 +1,5 @@
 package Net::Async::Webservice::UPS::Response::QV::Exception;
-$Net::Async::Webservice::UPS::Response::QV::Exception::VERSION = '1.1.1';
+$Net::Async::Webservice::UPS::Response::QV::Exception::VERSION = '1.1.2';
 {
   $Net::Async::Webservice::UPS::Response::QV::Exception::DIST = 'Net-Async-Webservice-UPS';
 }
@@ -166,7 +166,7 @@ Net::Async::Webservice::UPS::Response::QV::Exception - a Quantum View "exception
 
 =head1 VERSION
 
-version 1.1.1
+version 1.1.2
 
 =head1 DESCRIPTION
 
